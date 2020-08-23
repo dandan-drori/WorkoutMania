@@ -22,5 +22,25 @@ const nightMode = (state = { isNightModeOn: false }, { type, payload }) => {
   }
 };
 
-const reducer = combineReducers({ drawer, nightMode });
+const info = (
+  state = {
+    currentWeight: 0,
+    currentHeight: 0,
+    targetWeight: 0,
+  },
+  { type, payload },
+) => {
+  switch (type) {
+    case 'SET_CURRENT_WEIGHT':
+      return { ...state, currentWeight: payload };
+    case 'SET_CURRENT_HEIGHT':
+      return { ...state, currentHeight: payload };
+    case 'SET_TARGET_WEIGHT':
+      return { ...state, targetWeight: payload };
+    default:
+      return state;
+  }
+};
+
+const reducer = combineReducers({ drawer, nightMode, info });
 export default reducer;

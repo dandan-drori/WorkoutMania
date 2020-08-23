@@ -5,4 +5,4 @@ export const SecondaryButton = styled.TouchableOpacity``;
 
 export const darkTheme = '#050505';
 
-export const lightTheme = '#eee';
+export const lightTheme = '#fafafa';

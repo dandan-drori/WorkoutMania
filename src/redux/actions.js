@@ -13,3 +13,15 @@ export const turnNightModeOn = () => {
 export const turnNightModeOff = () => {
   return { type: 'TURN_NIGHTMODE_OFF' };
 };
+
+export const setCurrentWeight = value => {
+  return { type: 'SET_CURRENT_WEIGHT', payload: value };
+};
+
+export const setCurrentHeight = value => {
+  return { type: 'SET_CURRENT_HEIGHT', payload: value };
+};
+
+export const setTargetWeight = value => {
+  return { type: 'SET_TARGET_WEIGHT', payload: value };
+};
