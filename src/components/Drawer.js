@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
 import BackButton from './BackButton';
 import ProfilePicture from './ProfilePicture';
@@ -7,8 +7,10 @@ import { Link } from 'react-router-native';
 import SettingsButton from './SettingsButton';
 import { Animated } from 'react-native';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
+import { openDrawer, closeDrawer } from '../redux/actions';
 
 const Drawer = () => {
+  const dispatch = useDispatch();
   const isDrawerOpen = useSelector(state => state.drawer.isDrawerOpen);
   const slideAnim = useRef(new Animated.Value(-500)).current;
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
@@ -24,6 +26,7 @@ const Drawer = () => {
       duration: 500,
       useNativeDriver: false,
     }).start();
+    dispatch(openDrawer());
   };
 
   const closeNav = () => {
@@ -32,6 +35,7 @@ const Drawer = () => {
       duration: 500,
       useNativeDriver: false,
     }).start();
+    dispatch(closeDrawer());
   };
 
   useEffect(() => {
@@ -42,19 +46,23 @@ const Drawer = () => {
     <Animated.View
       style={{
         backgroundColor: isNightModeOn ? darkTheme : lightTheme,
-        width: '60%',
+        width: '70%',
         height: '100%',
         position: 'absolute',
         left: slideAnim,
+        borderColor: 'rgba(0,0,0,0.25)',
+        borderWidth: 0.2,
       }}>
       <>
         <ActionsContainer>
           <BackButton />
-          <SettingsButton />
+          <SettingsButton closeNav={closeNav} />
         </ActionsContainer>
         <Header>
-          <ProfilePicture />
-          <StyledLink to='/profile'>
+          <StyledLink to='/profile' onPress={() => closeNav()}>
+            <ProfilePicture />
+          </StyledLink>
+          <StyledLink to='/profile' onPress={() => closeNav()}>
             <Name isNightModeOn={isNightModeOn}>My Profile</Name>
           </StyledLink>
         </Header>
@@ -62,7 +70,7 @@ const Drawer = () => {
           <Links
             data={links}
             renderItem={({ item }) => (
-              <StyledLink to={item.path}>
+              <StyledLink to={item.path} onPress={() => closeNav()}>
                 <LinkText isNightModeOn={isNightModeOn}>{item.name}</LinkText>
               </StyledLink>
             )}
@@ -84,7 +92,6 @@ const Header = styled.View`
 `;
 
 const Name = styled.Text`
-  margin-top: 15px;
   font-size: 20px;
   margin-bottom: 30px;
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
@@ -97,7 +104,7 @@ const LinksContainer = styled.SafeAreaView`
 const Links = styled.FlatList``;
 
 const LinkText = styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;

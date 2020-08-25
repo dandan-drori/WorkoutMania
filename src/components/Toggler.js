@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Animated, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { turnNightModeOn, turnNightModeOff } from '../redux/actions';
-import { darkTheme } from '../style/GlobalStyle';
 
 const Toggler = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
@@ -25,15 +24,13 @@ const Toggler = () => {
     }).start();
   };
 
-  const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
-
   return (
-    <AnimatedTouchable
+    <TouchableOpacity
       style={{
         height: 25,
         width: 50,
         borderWidth: 2,
-        borderColor: isNightModeOn ? '#44cc00' : darkTheme,
+        borderColor: isNightModeOn ? '#44cc00' : '#ddd',
         borderRadius: 15,
         marginLeft: 15,
         marginTop: 3,
@@ -53,15 +50,15 @@ const Toggler = () => {
           height: 25,
           width: 25,
           borderRadius: 25,
-          backgroundColor: '#eee',
-          borderColor: isNightModeOn ? '#44cc00' : darkTheme,
+          backgroundColor: '#fff',
+          borderColor: isNightModeOn ? '#44cc00' : '#ddd',
           borderWidth: 2,
           position: 'absolute',
           top: -2,
           left: toggleAnim,
         }}
       />
-    </AnimatedTouchable>
+    </TouchableOpacity>
   );
 };
 

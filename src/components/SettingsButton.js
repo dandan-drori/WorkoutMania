@@ -4,10 +4,14 @@ import styled from 'styled-components/native';
 import { Link } from 'react-router-native';
 import { useSelector } from 'react-redux';
 
-const SettingsButton = () => {
+const SettingsButton = ({ closeNav }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   return (
-    <StyledLink to='/settings'>
+    <StyledLink
+      to='/settings'
+      onPress={() => {
+        closeNav();
+      }}>
       <SettingsIcon name='settings-outline' isNightModeOn={isNightModeOn} />
     </StyledLink>
   );

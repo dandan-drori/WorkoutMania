@@ -24,9 +24,9 @@ const nightMode = (state = { isNightModeOn: false }, { type, payload }) => {
 
 const info = (
   state = {
-    currentWeight: 0,
-    currentHeight: 0,
-    targetWeight: 0,
+    currentWeight: '',
+    currentHeight: '',
+    targetWeight: '',
   },
   { type, payload },
 ) => {

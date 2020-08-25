@@ -4,6 +4,4 @@
 
 // consider moving ProfileInfo into Dashboard
 
-// FIXME:
-
-// nothing to fix
+// check if its possible to move Animated API calls from components to utils
