@@ -25,3 +25,7 @@ export const setCurrentHeight = value => {
 export const setTargetWeight = value => {
   return { type: 'SET_TARGET_WEIGHT', payload: value };
 };
+
+export const setWorkouts = workouts => {
+  return { type: 'SET_WORKOUTS', payload: workouts };
+};

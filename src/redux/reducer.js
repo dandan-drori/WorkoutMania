@@ -42,5 +42,14 @@ const info = (
   }
 };
 
-const reducer = combineReducers({ drawer, nightMode, info });
+const workouts = (state = [], { type, payload }) => {
+  switch (type) {
+    case 'SET_WORKOUTS':
+      return payload;
+    default:
+      return state;
+  }
+};
+
+const reducer = combineReducers({ drawer, nightMode, info, workouts });
 export default reducer;

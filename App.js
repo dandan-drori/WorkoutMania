@@ -8,6 +8,8 @@ import reducer from './src/redux/reducer';
 import Profile from './src/components/Profile';
 import Home from './src/components/Home';
 import Settings from './src/components/Settings';
+import Workouts from './src/components/Workouts';
+import Exercises from './src/components/Exercises';
 
 const store = createStore(reducer);
 
@@ -21,7 +23,7 @@ const App = () => {
             <Home />
           </Route>
           <Route path='/workouts' exact>
-            {/* <Workouts /> */}
+            <Workouts />
           </Route>
           <Route path='/workouts/log' exact>
             {/* <Log /> */}
@@ -31,6 +33,9 @@ const App = () => {
           </Route>
           <Route path='/profile/dashboard' exact>
             {/* <Dashboard /> */}
+          </Route>
+          <Route path='/workouts/:name'>
+            <Exercises />
           </Route>
           <Route path='/settings' exact>
             <Settings />
