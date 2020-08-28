@@ -1,6 +1,11 @@
 {
     "cSpell.words": [
+        "active",
+        "dropset",
+        "is",
         "nightmode",
+        "set",
+        "set is dropset active",
         "toggle",
         "toggle nightmode"
     ]

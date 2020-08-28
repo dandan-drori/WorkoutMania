@@ -33,8 +33,10 @@ const Workouts = () => {
       <Loading isLoading={isLoading}>
         <List
           data={workouts}
-          renderItem={({ item }) => <Workout name={item.name} key={item._id} />}
-          keyExtractor={item => item._id}
+          renderItem={({ item }) => (
+            <Workout name={item.name} key={item.name} />
+          )}
+          keyExtractor={item => item.name}
           width={width}
         />
       </Loading>
