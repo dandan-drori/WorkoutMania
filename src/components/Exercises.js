@@ -6,12 +6,14 @@ import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import Exercise from './Exercise';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Animated } from 'react-native';
+import AddExercise from './modals/AddExercise';
 
 const Exercises = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const workouts = useSelector(state => state.workouts);
   const [exercises, setExercises] = useState([]);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { name } = useParams();
   const slideAnim = useRef(new Animated.Value(-255)).current;
 
@@ -20,7 +22,7 @@ const Exercises = () => {
       key: '1',
       icon: <Icon name='plus' color='#aa00ff' size={30} />,
       action: () => {
-        alert('hi');
+        setIsAddModalOpen(true);
       },
     },
     {
@@ -99,6 +101,10 @@ const Exercises = () => {
           )}
         </ActionsButtonText>
       </ActionsButton>
+      <AddExercise
+        isModalOpen={isAddModalOpen}
+        setIsModalOpen={setIsAddModalOpen}
+      />
     </Container>
   );
 };
