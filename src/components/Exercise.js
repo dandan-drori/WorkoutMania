@@ -1,41 +1,63 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Dimensions } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Icon from 'react-native-vector-icons/Foundation';
+import { deleteExercise } from '../utils/utils';
+import { incrementReFetch } from '../redux/actions';
 
-const Exercise = ({ name, sets, reps, weight }) => {
+const Exercise = ({ name, sets, reps, weight, workoutName, exercises }) => {
+  const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const [isDropsetActive, setIsDropsetActive] = useState(false);
   const [isSupersetActive, setIsSupersetActive] = useState(false);
   const { width } = Dimensions.get('window');
+
+  const leftActions = () => (
+    <LeftAction>
+      <TrashIcon name='trash' />
+    </LeftAction>
+  );
   return (
-    <Container isNightModeOn={isNightModeOn} width={width - 10}>
-      <FlexWrapper>
-        <Title isNightModeOn={isNightModeOn}>{name}</Title>
-        <ButtonsContainer>
-          <DropsetButton
-            bgColor='#ff3388aa'
-            isDropsetActive={isDropsetActive}
-            onPress={() => setIsDropsetActive(!isDropsetActive)}>
-            <ButtonText color='#ee3300ee'>D</ButtonText>
-          </DropsetButton>
-          <SupersetButton
-            bgColor='#88bb33aa'
-            isSupersetActive={isSupersetActive}
-            onPress={() => setIsSupersetActive(!isSupersetActive)}>
-            <ButtonText color='#77cc22ee'>S</ButtonText>
-          </SupersetButton>
-        </ButtonsContainer>
-      </FlexWrapper>
-      <Title>
-        <Title isNightModeOn={isNightModeOn}>Sets: {sets}</Title>
-        {'       '}
-        <Title isNightModeOn={isNightModeOn}>Reps: {reps}</Title>
-        {'       '}
-        <Title isNightModeOn={isNightModeOn}>Weight: {weight}</Title>
-      </Title>
-    </Container>
+    <Swipeable
+      renderLeftActions={leftActions}
+      onSwipeableLeftOpen={() => {
+        deleteExercise(
+          `http://10.0.0.12:8000/workouts/${workoutName}`,
+          exercises,
+          name,
+        );
+        dispatch(incrementReFetch());
+      }}>
+      <Container isNightModeOn={isNightModeOn} width={width - 10}>
+        <FlexWrapper>
+          <Title isNightModeOn={isNightModeOn}>{name}</Title>
+          <ButtonsContainer>
+            <DropsetButton
+              bgColor='#ff3388aa'
+              isDropsetActive={isDropsetActive}
+              onPress={() => setIsDropsetActive(!isDropsetActive)}>
+              <ButtonText color='#ee3300ee'>D</ButtonText>
+            </DropsetButton>
+            <SupersetButton
+              bgColor='#88bb33aa'
+              isSupersetActive={isSupersetActive}
+              onPress={() => setIsSupersetActive(!isSupersetActive)}>
+              <ButtonText color='#77cc22ee'>S</ButtonText>
+            </SupersetButton>
+          </ButtonsContainer>
+        </FlexWrapper>
+        <Title>
+          <Title isNightModeOn={isNightModeOn}>Sets: {sets}</Title>
+          {'       '}
+          <Title isNightModeOn={isNightModeOn}>Reps: {reps}</Title>
+          {'       '}
+          <Title isNightModeOn={isNightModeOn}>Weight: {weight}Kg</Title>
+        </Title>
+      </Container>
+    </Swipeable>
   );
 };
 
@@ -83,4 +105,18 @@ const ButtonText = styled.Text`
 const Title = styled.Text`
   color: ${({ isNightModeOn }) => (isNightModeOn ? darkTheme : lightTheme)};
   font-size: 20px;
+`;
+
+const LeftAction = styled.View`
+  background-color: #ff0000;
+  justify-content: center;
+  flex: 1;
+  height: 81%;
+  border-radius: 15px;
+`;
+
+const TrashIcon = styled(Icon)`
+  color: #fff;
+  font-size: 30px;
+  padding: 20px;
 `;

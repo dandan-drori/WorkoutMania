@@ -29,3 +29,7 @@ export const setTargetWeight = value => {
 export const setWorkouts = workouts => {
   return { type: 'SET_WORKOUTS', payload: workouts };
 };
+
+export const incrementReFetch = () => {
+  return { type: 'INCREMENT_REFETCH' };
+};

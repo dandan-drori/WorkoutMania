@@ -5,12 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getData } from '../utils/utils';
 import { setWorkouts } from '../redux/actions';
 import Workout from './Workout';
-import Loading from './Loading';
-import { Dimensions } from 'react-native';
+import { Dimensions, ActivityIndicator } from 'react-native';
 
 const Workouts = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const workouts = useSelector(state => state.workouts);
+  const reFetch = useSelector(state => state.reFetch.reFetch);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,14 +23,16 @@ const Workouts = () => {
       setIsLoading,
     );
     return () => setIsLoading(false);
-  }, [dispatch]);
+  }, [dispatch, reFetch]);
 
   const { width } = Dimensions.get('window');
 
   return (
     <Container isNightModeOn={isNightModeOn}>
       <Title isNightModeOn={isNightModeOn}>Workouts</Title>
-      <Loading isLoading={isLoading}>
+      {isLoading ? (
+        <ActivityIndicator size='large' color='#55bbff' />
+      ) : (
         <List
           data={workouts}
           renderItem={({ item }) => (
@@ -39,7 +41,7 @@ const Workouts = () => {
           keyExtractor={item => item.name}
           width={width}
         />
-      </Loading>
+      )}
     </Container>
   );
 };

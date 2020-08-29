@@ -8,5 +8,8 @@
         "set is dropset active",
         "toggle",
         "toggle nightmode"
+    ],
+    "cSpell.ignoreWords": [
+        "fexercise"
     ]
 }

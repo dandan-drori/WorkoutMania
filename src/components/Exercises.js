@@ -5,13 +5,15 @@ import { useSelector } from 'react-redux';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import Exercise from './Exercise';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Animated } from 'react-native';
+import { Animated, ActivityIndicator } from 'react-native';
 import AddExercise from './modals/AddExercise';
+import { getExercises } from '../utils/utils';
 
 const Exercises = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
-  const workouts = useSelector(state => state.workouts);
+  const reFetch = useSelector(state => state.reFetch.reFetch);
   const [exercises, setExercises] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { name } = useParams();
@@ -35,13 +37,13 @@ const Exercises = () => {
   ];
 
   useEffect(() => {
-    const exercisesList = workouts.map(workout => {
-      if (workout.name === name) {
-        return workout.exercises;
-      }
-    });
-    setExercises(exercisesList);
-  }, [workouts, name]);
+    setIsLoading(true);
+    getExercises(
+      `http://10.0.0.12:8000/workouts/${name}`,
+      setExercises,
+      setIsLoading,
+    );
+  }, [name, reFetch]);
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
@@ -62,21 +64,25 @@ const Exercises = () => {
   return (
     <Container isNightModeOn={isNightModeOn}>
       <Title isNightModeOn={isNightModeOn}>{name}</Title>
-      <List
-        data={exercises}
-        renderItem={({ item }) =>
-          item.map(exercise => (
+      {isLoading ? (
+        <ActivityIndicator size='large' color='#55bbff' />
+      ) : (
+        <List
+          data={exercises}
+          renderItem={({ item }) => (
             <Exercise
-              name={exercise.name}
-              weight={exercise.weight}
-              reps={exercise.reps}
-              sets={exercise.sets}
-              key={exercise.name}
+              name={item.name}
+              weight={item.weight}
+              reps={item.reps}
+              sets={item.sets}
+              key={item.name}
+              workoutName={name}
+              exercises={exercises}
             />
-          ))
-        }
-        keyExtractor={item => item.name}
-      />
+          )}
+          keyExtractor={item => item.name}
+        />
+      )}
       <ActionsContainer isActionsMenuOpen={isActionsMenuOpen}>
         <Animated.FlatList
           data={actionsList}
@@ -104,6 +110,9 @@ const Exercises = () => {
       <AddExercise
         isModalOpen={isAddModalOpen}
         setIsModalOpen={setIsAddModalOpen}
+        workoutName={name}
+        exercises={exercises}
+        setIsActionsMenuOpen={setIsActionsMenuOpen}
       />
     </Container>
   );

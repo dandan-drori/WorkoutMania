@@ -8,6 +8,8 @@ import SettingsButton from './SettingsButton';
 import { Animated } from 'react-native';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import { openDrawer, closeDrawer } from '../redux/actions';
+import Home from 'react-native-vector-icons/Entypo';
+import Weights from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Drawer = () => {
   const dispatch = useDispatch();
@@ -16,8 +18,13 @@ const Drawer = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
 
   const links = [
-    { key: '1', name: 'Home', path: '/' },
-    { key: '2', name: 'Workouts', path: '/workouts' },
+    { key: '1', name: 'Home', path: '/', icon: <HomeIcon name='home' /> },
+    {
+      key: '2',
+      name: 'Workouts',
+      path: '/workouts',
+      icon: <WeightsIcon name='weight-lifter' />,
+    },
   ];
 
   const openNav = () => {
@@ -71,7 +78,10 @@ const Drawer = () => {
             data={links}
             renderItem={({ item }) => (
               <StyledLink to={item.path} onPress={() => closeNav()}>
-                <LinkText isNightModeOn={isNightModeOn}>{item.name}</LinkText>
+                <>
+                  {item.icon}
+                  <LinkText isNightModeOn={isNightModeOn}>{item.name}</LinkText>
+                </>
               </StyledLink>
             )}
           />
@@ -111,6 +121,20 @@ const LinkText = styled.Text`
 
 const StyledLink = styled(Link)`
   margin-bottom: 15px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HomeIcon = styled(Home)`
+  font-size: 30px;
+  color: #050505;
+  margin-right: 5px;
+`;
+
+const WeightsIcon = styled(Weights)`
+  font-size: 30px;
+  color: #050505;
+  margin-right: 5px;
 `;
 
 export default Drawer;

@@ -1,27 +1,57 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Picker } from '@react-native-community/picker';
+import { addExercise } from '../../utils/utils';
+import { useDispatch } from 'react-redux';
+import { incrementReFetch } from '../../redux/actions';
 
-const AddExercise = ({ isModalOpen, setIsModalOpen }) => {
+const AddExercise = ({
+  isModalOpen,
+  setIsModalOpen,
+  workoutName,
+  exercises,
+  setIsActionsMenuOpen,
+}) => {
+  const dispatch = useDispatch();
   const [formState, setFormState] = useState({
     name: '',
     sets: '',
     reps: '',
     weight: '',
   });
+
+  const handleSubmit = () => {
+    addExercise(`http://10.0.0.12:8000/workouts/${workoutName}`, exercises, {
+      name: formState.name,
+      sets: formState.sets,
+      reps: formState.reps,
+      weight: formState.weight,
+    });
+    setIsModalOpen(false);
+    setIsActionsMenuOpen(false);
+    dispatch(incrementReFetch());
+    setFormState({
+      name: '',
+      sets: '',
+      reps: '',
+      weight: '',
+    });
+  };
+
   return (
     <Container isModalOpen={isModalOpen}>
       <ContentContainer isModalOpen={isModalOpen}>
         <Title isModalOpen={isModalOpen}>add exercise</Title>
         <>
           <Input
+            isModalOpen={isModalOpen}
             type='text'
             placeholder='Name'
             value={formState.name}
             onChangeText={text => setFormState({ ...formState, name: text })}
           />
-          <LabelContainer>
-            <LabelText>Sets:</LabelText>
+          <LabelContainer isModalOpen={isModalOpen}>
+            <LabelText isModalOpen={isModalOpen}>Sets:</LabelText>
             <Picker
               selectedValue={formState.sets}
               style={{ height: 50, width: 100 }}
@@ -35,8 +65,8 @@ const AddExercise = ({ isModalOpen, setIsModalOpen }) => {
               <Picker.Item label='5' value='5' />
             </Picker>
           </LabelContainer>
-          <LabelContainer>
-            <LabelText>Reps:</LabelText>
+          <LabelContainer isModalOpen={isModalOpen}>
+            <LabelText isModalOpen={isModalOpen}>Reps:</LabelText>
             <Picker
               selectedValue={formState.reps}
               style={{ height: 50, width: 100 }}
@@ -58,6 +88,7 @@ const AddExercise = ({ isModalOpen, setIsModalOpen }) => {
             </Picker>
           </LabelContainer>
           <Input
+            isModalOpen={isModalOpen}
             type='text'
             placeholder='Weight'
             width={60}
@@ -66,11 +97,17 @@ const AddExercise = ({ isModalOpen, setIsModalOpen }) => {
           />
         </>
         <ActionsContainer isModalOpen={isModalOpen}>
-          <Action onPress={() => {}}>
-            <ActionText color='#aa00ff'>Add</ActionText>
+          <Action onPress={() => handleSubmit()} isModalOpen={isModalOpen}>
+            <ActionText color='#aa00ff' isModalOpen={isModalOpen}>
+              Add
+            </ActionText>
           </Action>
-          <Action onPress={() => setIsModalOpen(false)}>
-            <ActionText color='#050505'>Cancel</ActionText>
+          <Action
+            onPress={() => setIsModalOpen(false)}
+            isModalOpen={isModalOpen}>
+            <ActionText color='#050505' isModalOpen={isModalOpen}>
+              Cancel
+            </ActionText>
           </Action>
         </ActionsContainer>
       </ContentContainer>
@@ -113,11 +150,13 @@ const ActionsContainer = styled.View`
 const Action = styled.TouchableOpacity`
   margin-left: 1px;
   padding: 3px 5px;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
 `;
 
 const ActionText = styled.Text`
   color: ${({ color }) => color};
   font-size: 18px;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
 `;
 
 const Input = styled.TextInput`
@@ -125,13 +164,16 @@ const Input = styled.TextInput`
   padding: 3px 5px;
   color: black;
   margin-top: 10px;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
 `;
 
 const LabelContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
 `;
 
 const LabelText = styled.Text`
   font-size: 17px;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
 `;
