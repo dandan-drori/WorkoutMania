@@ -3,16 +3,25 @@ import styled from 'styled-components/native';
 import { useSelector, useDispatch } from 'react-redux';
 import CountDown from 'react-native-countdown-component';
 import { useHistory, useParams } from 'react-router-native';
-import { decrementTimer } from '../redux/actions';
+import {
+  decrementTimer,
+  incrementCurrentExerciseIndex,
+  resetCurrentExerciseIndex,
+  resetTimer,
+} from '../redux/actions';
 import ActionsButton from './ActionsButton';
 import { Animated, ActivityIndicator } from 'react-native';
 import Exit from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { lightTheme, darkTheme } from '../style/GlobalStyle';
 import { getExercises } from '../utils/utils';
 
 const WorkoutMode = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
-  const timer = useSelector(state => state.workoutTimer.timer);
+  const timer = useSelector(state => state.workoutMode.timer);
+  const currentExerciseIndex = useSelector(
+    state => state.workoutMode.currentExerciseIndex,
+  );
   const slideAnim = useRef(new Animated.Value(-355)).current;
   const reFetch = useSelector(state => state.reFetch.reFetch);
   const [exercises, setExercises] = useState([]);
@@ -25,7 +34,6 @@ const WorkoutMode = () => {
   const [isCountdownRunning, setIsCountdownRunning] = useState(true);
   const [isRestCountdownRunning, setIsRestCountdownRunning] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
   const [isSetsButtonPressed, setIsSetsButtonPressed] = useState({
     one: false,
@@ -55,11 +63,35 @@ const WorkoutMode = () => {
         history.push(`/workouts/${name}`);
       },
     },
+    {
+      key: '2',
+      icon: <StyledIcon name='stop' />,
+      action: () => {
+        dispatch(resetCurrentExerciseIndex());
+        dispatch(resetTimer());
+      },
+    },
+    {
+      key: '3',
+      icon: <StyledIcon name='pause' />,
+      action: () => {
+        setIsCountdownRunning(false);
+        setIsRestCountdownRunning(false);
+      },
+    },
+    {
+      key: '4',
+      icon: <StyledIcon name='play' />,
+      action: () => {
+        setIsCountdownRunning(true);
+        setIsRestCountdownRunning(true);
+      },
+    },
   ];
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
-      toValue: -200,
+      toValue: -30,
       duration: 300,
       useNativeDriver: false,
     }).start();
@@ -117,7 +149,6 @@ const WorkoutMode = () => {
               size={25}
               onFinish={() => {
                 setIsWorkoutCompleted(true);
-                // history.push(`/workouts/${name}`);
               }}
               digitStyle={{ backgroundColor: 'transparent' }}
               digitTxtStyle={{ color: '#aa00ff' }}
@@ -138,14 +169,16 @@ const WorkoutMode = () => {
                 <CurrentExercise isNightModeOn={isNightModeOn}>
                   {exercises.length > 0 ? (
                     <>
-                      <Name>{exercises[currentExerciseIndex].name}</Name>
+                      <Name isNightModeOn={isNightModeOn}>
+                        {exercises[currentExerciseIndex].name}
+                      </Name>
                       <Sets>
                         {exercises[currentExerciseIndex].sets < 2 ? (
                           <StyledSet
                             isSetsButtonPressed={isSetsButtonPressed.one}
                             activeOpacity={0.7}
                             onPress={() => {
-                              setCurrentExerciseIndex(currentExerciseIndex + 1);
+                              dispatch(incrementCurrentExerciseIndex());
                               setIsRestCountdownRunning(true);
                               setIsSetsButtonPressed({
                                 ...isSetsButtonPressed,
@@ -173,10 +206,9 @@ const WorkoutMode = () => {
                             <StyledSet
                               isSetsButtonPressed={isSetsButtonPressed.three}
                               activeOpacity={0.7}
+                              disabled={!isSetsButtonPressed.two}
                               onPress={() => {
-                                setCurrentExerciseIndex(
-                                  currentExerciseIndex + 1,
-                                );
+                                dispatch(incrementCurrentExerciseIndex());
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -207,6 +239,7 @@ const WorkoutMode = () => {
                             <StyledSet
                               isSetsButtonPressed={isSetsButtonPressed.five}
                               activeOpacity={0.7}
+                              disabled={!isSetsButtonPressed.four}
                               onPress={() => {
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
@@ -221,14 +254,13 @@ const WorkoutMode = () => {
                             <StyledSet
                               isSetsButtonPressed={isSetsButtonPressed.six}
                               activeOpacity={0.7}
+                              disabled={!isSetsButtonPressed.five}
                               onPress={() => {
                                 if (
                                   currentExerciseIndex + 1 <
                                   exercises.length
                                 ) {
-                                  setCurrentExerciseIndex(
-                                    currentExerciseIndex + 1,
-                                  );
+                                  dispatch(incrementCurrentExerciseIndex());
                                 } else {
                                   setIsWorkoutCompleted(true);
                                 }
@@ -262,6 +294,7 @@ const WorkoutMode = () => {
                             <StyledSet
                               isSetsButtonPressed={isSetsButtonPressed.eight}
                               activeOpacity={0.7}
+                              disabled={!isSetsButtonPressed.seven}
                               onPress={() => {
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
@@ -276,6 +309,7 @@ const WorkoutMode = () => {
                             <StyledSet
                               isSetsButtonPressed={isSetsButtonPressed.nine}
                               activeOpacity={0.7}
+                              disabled={!isSetsButtonPressed.eight}
                               onPress={() => {
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
@@ -290,10 +324,9 @@ const WorkoutMode = () => {
                             <StyledSet
                               isSetsButtonPressed={isSetsButtonPressed.ten}
                               activeOpacity={0.7}
+                              disabled={!isSetsButtonPressed.nine}
                               onPress={() => {
-                                setCurrentExerciseIndex(
-                                  currentExerciseIndex + 1,
-                                );
+                                dispatch(incrementCurrentExerciseIndex());
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -338,9 +371,13 @@ const WorkoutMode = () => {
                 <NextExercise isNightModeOn={isNightModeOn}>
                   {exercises.length > 0 &&
                   currentExerciseIndex + 1 < exercises.length ? (
-                    <Name>{exercises[currentExerciseIndex + 1].name}</Name>
+                    <Name isNightModeOn={isNightModeOn}>
+                      {exercises[currentExerciseIndex + 1].name}
+                    </Name>
                   ) : (
-                    <Title>Workout Completed!</Title>
+                    <Message isNightModeOn={isNightModeOn}>
+                      Workout Completed!
+                    </Message>
                   )}
                 </NextExercise>
               </>
@@ -406,6 +443,13 @@ const Title = styled.Text`
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
+const Message = styled.Text`
+  font-size: 25px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? darkTheme : lightTheme)};
+`;
+
 const ScrollWrapper = styled.ScrollView``;
 
 const CurrentExercise = styled.View`
@@ -427,6 +471,7 @@ const NextExercise = styled.View`
 const Name = styled.Text`
   font-size: 20px;
   margin-bottom: 5px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? darkTheme : lightTheme)};
 `;
 
 const Sets = styled.View`
@@ -441,7 +486,10 @@ const StyledSet = styled.TouchableOpacity`
   margin-right: 10px;
 `;
 
-const Reps = styled.Text``;
+const Reps = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+`;
 
 const ActionsContainer = styled.View`
   position: absolute;
@@ -464,6 +512,11 @@ const Action = styled.TouchableOpacity`
 `;
 
 const ExitIcon = styled(Exit)`
+  color: #aa00ff;
+  font-size: 25px;
+`;
+
+const StyledIcon = styled(Icon)`
   color: #aa00ff;
   font-size: 25px;
 `;

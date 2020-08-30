@@ -60,10 +60,19 @@ const reFetch = (state = { reFetch: 0 }, { type, payload }) => {
   }
 };
 
-const workoutTimer = (state = { timer: 5400 }, { type, payload }) => {
+const workoutMode = (
+  state = { timer: 5400, currentExerciseIndex: 0 },
+  { type, payload },
+) => {
   switch (type) {
     case 'DECREMENT_TIMER':
       return { ...state, timer: state.timer - 1 };
+    case 'RESET_TIMER':
+      return { ...state, timer: 5400 };
+    case 'INCREMENT_CURRENT_EXERCISE_INDEX':
+      return { ...state, currentExerciseIndex: state.currentExerciseIndex + 1 };
+    case 'RESET_CURRENT_EXERCISE_INDEX':
+      return { ...state, currentExerciseIndex: 0 };
     default:
       return state;
   }
@@ -75,6 +84,6 @@ const reducer = combineReducers({
   info,
   workouts,
   reFetch,
-  workoutTimer,
+  workoutMode,
 });
 export default reducer;

@@ -37,3 +37,15 @@ export const incrementReFetch = () => {
 export const decrementTimer = () => {
   return { type: 'DECREMENT_TIMER' };
 };
+
+export const incrementCurrentExerciseIndex = () => {
+  return { type: 'INCREMENT_CURRENT_EXERCISE_INDEX' };
+};
+
+export const resetCurrentExerciseIndex = () => {
+  return { type: 'RESET_CURRENT_EXERCISE_INDEX' };
+};
+
+export const resetTimer = () => {
+  return { type: 'RESET_TIMER' };
+};
