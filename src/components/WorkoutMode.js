@@ -17,13 +17,35 @@ const WorkoutMode = () => {
   const reFetch = useSelector(state => state.reFetch.reFetch);
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [restTimer, setRestTimer] = useState(90);
+  const [restTimerKey, setRestTimerKey] = useState(1);
   const history = useHistory();
   const { name } = useParams();
   const dispatch = useDispatch();
   const [isCountdownRunning, setIsCountdownRunning] = useState(true);
+  const [isRestCountdownRunning, setIsRestCountdownRunning] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
-  const [currentExerciseSets, setCurrentExerciseSets] = useState([]);
+  const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
+  const [isSetsButtonPressed, setIsSetsButtonPressed] = useState({
+    one: false,
+    two: false,
+    three: false,
+    four: false,
+    five: false,
+    six: false,
+    seven: false,
+    eight: false,
+    nine: false,
+    ten: false,
+    eleven: false,
+    twelve: false,
+    thirteen: false,
+    fourteen: false,
+    fifteen: false,
+    sixteen: false,
+    seventeen: false,
+  });
 
   const actionsList = [
     {
@@ -52,6 +74,28 @@ const WorkoutMode = () => {
   };
 
   useEffect(() => {
+    setIsSetsButtonPressed({
+      one: false,
+      two: false,
+      three: false,
+      four: false,
+      five: false,
+      six: false,
+      seven: false,
+      eight: false,
+      nine: false,
+      ten: false,
+      eleven: false,
+      twelve: false,
+      thirteen: false,
+      fourteen: false,
+      fifteen: false,
+      sixteen: false,
+      seventeen: false,
+    });
+  }, [currentExerciseIndex]);
+
+  useEffect(() => {
     setIsLoading(true);
     getExercises(
       `http://10.0.0.12:8000/workouts/${name}`,
@@ -62,166 +106,274 @@ const WorkoutMode = () => {
 
   return (
     <Container isNightModeOn={isNightModeOn}>
-      <WorkoutTimer isNightModeOn={isNightModeOn}>
-        <WorkoutTimerText isNightModeOn={isNightModeOn}>
-          Time Left:
-        </WorkoutTimerText>
-        <CountDown
-          until={timer}
-          size={25}
-          onFinish={() => {
-            alert('Workout Completed');
-            history.pop();
-          }}
-          digitStyle={{ backgroundColor: 'transparent' }}
-          digitTxtStyle={{ color: '#aa00ff' }}
-          timeToShow={['H', 'M', 'S']}
-          timeLabels={{ h: '', m: '', s: '' }}
-          separatorStyle={{ color: '#aa00ff' }}
-          showSeparator
-          onChange={() => dispatch(decrementTimer())}
-          running={isCountdownRunning}
-        />
-      </WorkoutTimer>
-      <ScrollWrapper contentContainerStyle={{ alignItems: 'center' }}>
-        {isLoading ? (
-          <ActivityIndicator size='large' color='#55bbff' />
-        ) : (
-          <>
-            <Title isNightModeOn={isNightModeOn}>Current Exercise:</Title>
-            <CurrentExercise isNightModeOn={isNightModeOn}>
-              {exercises.length > 0 ? (
-                <>
-                  <Name>{exercises[currentExerciseIndex].name}</Name>
-                  <Sets>
-                    {exercises[currentExerciseIndex].sets < 2 ? (
-                      <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                        <Reps>{exercises[currentExerciseIndex].reps}</Reps>
-                      </StyledSet>
-                    ) : exercises[currentExerciseIndex].sets < 3 ? (
-                      <>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>{exercises[currentExerciseIndex].reps}</Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>{exercises[currentExerciseIndex].reps}</Reps>
-                        </StyledSet>
-                      </>
-                    ) : exercises[currentExerciseIndex].sets < 4 ? (
-                      <>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>{exercises[currentExerciseIndex].reps}</Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>{exercises[currentExerciseIndex].reps}</Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>{exercises[currentExerciseIndex].reps}</Reps>
-                        </StyledSet>
-                      </>
-                    ) : null}
-                  </Sets>
-                </>
-              ) : (
-                <Title>None</Title>
+      {!isWorkoutCompleted ? (
+        <>
+          <WorkoutTimer isNightModeOn={isNightModeOn}>
+            <WorkoutTimerText isNightModeOn={isNightModeOn}>
+              Time Left:
+            </WorkoutTimerText>
+            <CountDown
+              until={timer}
+              size={25}
+              onFinish={() => {
+                setIsWorkoutCompleted(true);
+                // history.push(`/workouts/${name}`);
+              }}
+              digitStyle={{ backgroundColor: 'transparent' }}
+              digitTxtStyle={{ color: '#aa00ff' }}
+              timeToShow={['H', 'M', 'S']}
+              timeLabels={{ h: '', m: '', s: '' }}
+              separatorStyle={{ color: '#aa00ff' }}
+              showSeparator
+              onChange={() => dispatch(decrementTimer())}
+              running={isCountdownRunning}
+            />
+          </WorkoutTimer>
+          <ScrollWrapper contentContainerStyle={{ alignItems: 'center' }}>
+            {isLoading ? (
+              <ActivityIndicator size='large' color='#55bbff' />
+            ) : (
+              <>
+                <Title isNightModeOn={isNightModeOn}>Current Exercise:</Title>
+                <CurrentExercise isNightModeOn={isNightModeOn}>
+                  {exercises.length > 0 ? (
+                    <>
+                      <Name>{exercises[currentExerciseIndex].name}</Name>
+                      <Sets>
+                        {exercises[currentExerciseIndex].sets < 2 ? (
+                          <StyledSet
+                            isSetsButtonPressed={isSetsButtonPressed.one}
+                            activeOpacity={0.7}
+                            onPress={() => {
+                              setCurrentExerciseIndex(currentExerciseIndex + 1);
+                              setIsRestCountdownRunning(true);
+                              setIsSetsButtonPressed({
+                                ...isSetsButtonPressed,
+                                one: true,
+                              });
+                            }}>
+                            <Reps>{exercises[currentExerciseIndex].reps}</Reps>
+                          </StyledSet>
+                        ) : exercises[currentExerciseIndex].sets < 3 ? (
+                          <>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.two}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  two: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.three}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setCurrentExerciseIndex(
+                                  currentExerciseIndex + 1,
+                                );
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  three: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                          </>
+                        ) : exercises[currentExerciseIndex].sets < 4 ? (
+                          <>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.four}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  four: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.five}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  five: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.six}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                if (
+                                  currentExerciseIndex + 1 <
+                                  exercises.length
+                                ) {
+                                  setCurrentExerciseIndex(
+                                    currentExerciseIndex + 1,
+                                  );
+                                } else {
+                                  setIsWorkoutCompleted(true);
+                                }
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  six: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                          </>
+                        ) : exercises[currentExerciseIndex].sets < 5 ? (
+                          <>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.seven}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  seven: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.eight}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  eight: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.nine}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  nine: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                            <StyledSet
+                              isSetsButtonPressed={isSetsButtonPressed.ten}
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                setCurrentExerciseIndex(
+                                  currentExerciseIndex + 1,
+                                );
+                                setIsRestCountdownRunning(true);
+                                setIsSetsButtonPressed({
+                                  ...isSetsButtonPressed,
+                                  ten: true,
+                                });
+                              }}>
+                              <Reps>
+                                {exercises[currentExerciseIndex].reps}
+                              </Reps>
+                            </StyledSet>
+                          </>
+                        ) : (
+                          <Title>Error: More Reps Than Allowed!</Title>
+                        )}
+                      </Sets>
+                    </>
+                  ) : (
+                    <Title>Workout Completed!</Title>
+                  )}
+                </CurrentExercise>
+                <Title isNightModeOn={isNightModeOn}>Rest Time: </Title>
+                <CountDown
+                  key={restTimerKey}
+                  until={restTimer}
+                  size={25}
+                  onFinish={() => {
+                    alert('Rest time is over!');
+                    setRestTimer(90);
+                    setRestTimerKey(restTimerKey + 1);
+                    setIsRestCountdownRunning(false);
+                  }}
+                  digitStyle={{ backgroundColor: 'transparent' }}
+                  digitTxtStyle={{ color: '#aa00ff' }}
+                  timeToShow={['M', 'S']}
+                  timeLabels={{ m: '', s: '' }}
+                  separatorStyle={{ color: '#aa00ff' }}
+                  showSeparator
+                  onChange={() => {}}
+                  running={isRestCountdownRunning}
+                />
+                <Title isNightModeOn={isNightModeOn}>Next Exercise:</Title>
+                <NextExercise isNightModeOn={isNightModeOn}>
+                  {exercises.length > 0 &&
+                  currentExerciseIndex + 1 < exercises.length ? (
+                    <Name>{exercises[currentExerciseIndex + 1].name}</Name>
+                  ) : (
+                    <Title>Workout Completed!</Title>
+                  )}
+                </NextExercise>
+              </>
+            )}
+          </ScrollWrapper>
+          <ActionsContainer
+            isNightModeOn={isNightModeOn}
+            isActionsMenuOpen={isActionsMenuOpen}>
+            <Animated.FlatList
+              data={actionsList}
+              renderItem={({ item }) => (
+                <Action
+                  key={item.key}
+                  onPress={() => item.action()}
+                  activeOpacity={0.7}>
+                  {item.icon}
+                </Action>
               )}
-            </CurrentExercise>
-            <Title isNightModeOn={isNightModeOn}>Next Exercise:</Title>
-            <NextExercise isNightModeOn={isNightModeOn}>
-              {exercises.length > 0 ? (
-                <>
-                  <Name>{exercises[currentExerciseIndex + 1].name}</Name>
-                  <Sets>
-                    {exercises[currentExerciseIndex + 1].sets < 2 ? (
-                      <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                        <Reps>{exercises[currentExerciseIndex + 1].reps}</Reps>
-                      </StyledSet>
-                    ) : exercises[currentExerciseIndex + 1].sets < 3 ? (
-                      <>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                      </>
-                    ) : exercises[currentExerciseIndex + 1].sets < 4 ? (
-                      <>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                      </>
-                    ) : exercises[currentExerciseIndex + 1].sets < 5 ? (
-                      <>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                        <StyledSet activeOpacity={0.7} onPress={() => {}}>
-                          <Reps>
-                            {exercises[currentExerciseIndex + 1].reps}
-                          </Reps>
-                        </StyledSet>
-                      </>
-                    ) : null}
-                  </Sets>
-                </>
-              ) : (
-                <Title>None</Title>
-              )}
-            </NextExercise>
-          </>
-        )}
-      </ScrollWrapper>
-      <ActionsContainer
-        isNightModeOn={isNightModeOn}
-        isActionsMenuOpen={isActionsMenuOpen}>
-        <Animated.FlatList
-          data={actionsList}
-          renderItem={({ item }) => (
-            <Action
-              key={item.key}
-              onPress={() => item.action()}
-              activeOpacity={0.7}>
-              {item.icon}
-            </Action>
-          )}
-          style={{ position: 'relative', bottom: slideAnim }}
-        />
-      </ActionsContainer>
-      <ActionsButton
-        setIsActionsMenuOpen={setIsActionsMenuOpen}
-        isActionsMenuOpen={isActionsMenuOpen}
-        slideIn={slideIn}
-        slideOut={slideOut}
-      />
+              style={{ position: 'relative', bottom: slideAnim }}
+            />
+          </ActionsContainer>
+          <ActionsButton
+            setIsActionsMenuOpen={setIsActionsMenuOpen}
+            isActionsMenuOpen={isActionsMenuOpen}
+            slideIn={slideIn}
+            slideOut={slideOut}
+          />
+        </>
+      ) : (
+        <>
+          <Title isNightModeOn={isNightModeOn}>Workout Completed!</Title>
+        </>
+      )}
     </Container>
   );
 };
@@ -250,6 +402,7 @@ const WorkoutTimerText = styled.Text`
 const Title = styled.Text`
   font-size: 25px;
   margin-bottom: 15px;
+  margin-top: 10px;
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
@@ -272,7 +425,8 @@ const NextExercise = styled.View`
 `;
 
 const Name = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
+  margin-bottom: 5px;
 `;
 
 const Sets = styled.View`
@@ -280,9 +434,11 @@ const Sets = styled.View`
 `;
 
 const StyledSet = styled.TouchableOpacity`
-  background-color: rgba(255, 0, 0, 0.55);
+  background-color: ${({ isSetsButtonPressed }) =>
+    isSetsButtonPressed ? 'rgba(0,255,0,0.35)' : 'rgba(255, 0, 0, 0.55)'};
   border-radius: 100px;
-  padding: 10px 17px;
+  padding: 13px 20px;
+  margin-right: 10px;
 `;
 
 const Reps = styled.Text``;
