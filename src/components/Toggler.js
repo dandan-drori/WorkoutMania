@@ -26,6 +26,7 @@ const Toggler = () => {
 
   return (
     <TouchableOpacity
+      activeOpacity={0.7}
       style={{
         height: 25,
         width: 50,

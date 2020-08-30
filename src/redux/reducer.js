@@ -60,5 +60,21 @@ const reFetch = (state = { reFetch: 0 }, { type, payload }) => {
   }
 };
 
-const reducer = combineReducers({ drawer, nightMode, info, workouts, reFetch });
+const workoutTimer = (state = { timer: 5400 }, { type, payload }) => {
+  switch (type) {
+    case 'DECREMENT_TIMER':
+      return { ...state, timer: state.timer - 1 };
+    default:
+      return state;
+  }
+};
+
+const reducer = combineReducers({
+  drawer,
+  nightMode,
+  info,
+  workouts,
+  reFetch,
+  workoutTimer,
+});
 export default reducer;

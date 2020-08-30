@@ -91,7 +91,7 @@ const AddExercise = ({
             isModalOpen={isModalOpen}
             type='text'
             placeholder='Weight'
-            width={60}
+            width={63}
             value={formState.weight}
             onChangeText={text => setFormState({ ...formState, weight: text })}
           />
@@ -161,7 +161,7 @@ const ActionText = styled.Text`
 
 const Input = styled.TextInput`
   background-color: rgba(0, 0, 0, 0.35);
-  padding: 3px 5px;
+  padding: 5px 7px;
   color: black;
   margin-top: 10px;
   display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};

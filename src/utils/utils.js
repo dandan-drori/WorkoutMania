@@ -5,6 +5,28 @@ export const getData = async (url, dispatch, setData, setIsLoading) => {
   setIsLoading(false);
 };
 
+export const postData = (url, data) => {
+  const reqOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: data,
+    }),
+  };
+  fetch(url, reqOptions);
+};
+
+export const deleteData = (url, data) => {
+  const reqOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: data,
+    }),
+  };
+  fetch(url, reqOptions);
+};
+
 export const addExercise = (url, exercises, newExercise) => {
   const reqOptions = {
     method: 'PATCH',

@@ -8,6 +8,8 @@ const SettingsButton = ({ closeNav }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   return (
     <StyledLink
+      component={StyledButton}
+      activeOpacity={0.7}
       to='/settings'
       onPress={() => {
         closeNav();
@@ -24,5 +26,7 @@ const SettingsIcon = styled(Icon)`
 `;
 
 const StyledLink = styled(Link)``;
+
+const StyledButton = styled.TouchableOpacity``;
 
 export default SettingsButton;

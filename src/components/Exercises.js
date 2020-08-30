@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
-import { useParams } from 'react-router-native';
+import { useParams, useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import Exercise from './Exercise';
@@ -8,8 +8,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Animated, ActivityIndicator } from 'react-native';
 import AddExercise from './modals/AddExercise';
 import { getExercises } from '../utils/utils';
+import ActionsButton from './ActionsButton';
 
 const Exercises = () => {
+  const history = useHistory();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const reFetch = useSelector(state => state.reFetch.reFetch);
   const [exercises, setExercises] = useState([]);
@@ -31,7 +33,7 @@ const Exercises = () => {
       key: '2',
       icon: <Icon name='play' color='#aa00ff' size={30} />,
       action: () => {
-        alert('second');
+        history.push(`/workouts/${name}/workout-mode`);
       },
     },
   ];
@@ -87,7 +89,10 @@ const Exercises = () => {
         <Animated.FlatList
           data={actionsList}
           renderItem={({ item }) => (
-            <Action key={item.key} onPress={() => item.action()}>
+            <Action
+              key={item.key}
+              onPress={() => item.action()}
+              activeOpacity={0.7}>
               {item.icon}
             </Action>
           )}
@@ -95,18 +100,11 @@ const Exercises = () => {
         />
       </ActionsContainer>
       <ActionsButton
-        onPress={() => {
-          setIsActionsMenuOpen(!isActionsMenuOpen);
-          isActionsMenuOpen ? slideOut() : slideIn();
-        }}>
-        <ActionsButtonText>
-          {isActionsMenuOpen ? (
-            <ActionsButtonIcon name='close' isNightModeOn={isNightModeOn} />
-          ) : (
-            <ActionsButtonIcon name='plus' isNightModeOn={isNightModeOn} />
-          )}
-        </ActionsButtonText>
-      </ActionsButton>
+        setIsActionsMenuOpen={setIsActionsMenuOpen}
+        isActionsMenuOpen={isActionsMenuOpen}
+        slideOut={slideOut}
+        slideIn={slideIn}
+      />
       <AddExercise
         isModalOpen={isAddModalOpen}
         setIsModalOpen={setIsAddModalOpen}
@@ -136,20 +134,6 @@ const Title = styled.Text`
 
 const List = styled.FlatList``;
 
-const ActionsButton = styled.TouchableHighlight`
-  background-color: #aa00ff;
-  margin-bottom: 100px;
-  border-radius: 100px;
-  padding: 18px 22px;
-`;
-
-const ActionsButtonText = styled.Text``;
-
-const ActionsButtonIcon = styled(Icon)`
-  font-size: 25px;
-  color: ${({ isNightModeOn }) => (isNightModeOn ? darkTheme : lightTheme)};
-`;
-
 const ActionsContainer = styled.View`
   position: absolute;
   background-color: ${({ isActionsMenuOpen }) =>
@@ -161,7 +145,7 @@ const ActionsContainer = styled.View`
   padding-top: 100%;
 `;
 
-const Action = styled.TouchableHighlight`
+const Action = styled.TouchableOpacity`
   background-color: white;
   margin-bottom: 15px;
   border-radius: 50px;

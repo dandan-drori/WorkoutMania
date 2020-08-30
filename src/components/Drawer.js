@@ -10,6 +10,7 @@ import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import { openDrawer, closeDrawer } from '../redux/actions';
 import Home from 'react-native-vector-icons/Entypo';
 import Weights from 'react-native-vector-icons/MaterialCommunityIcons';
+import User from 'react-native-vector-icons/FontAwesome';
 
 const Drawer = () => {
   const dispatch = useDispatch();
@@ -18,12 +19,17 @@ const Drawer = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
 
   const links = [
-    { key: '1', name: 'Home', path: '/', icon: <HomeIcon name='home' /> },
+    {
+      key: '1',
+      name: 'Home',
+      path: '/',
+      icon: <HomeIcon name='home' isNightModeOn={isNightModeOn} />,
+    },
     {
       key: '2',
       name: 'Workouts',
       path: '/workouts',
-      icon: <WeightsIcon name='weight-lifter' />,
+      icon: <WeightsIcon name='weight-lifter' isNightModeOn={isNightModeOn} />,
     },
   ];
 
@@ -66,18 +72,33 @@ const Drawer = () => {
           <SettingsButton closeNav={closeNav} />
         </ActionsContainer>
         <Header>
-          <StyledLink to='/profile' onPress={() => closeNav()}>
+          <StyledLink
+            component={StyledButton}
+            activeOpacity={0.7}
+            to='/profile'
+            onPress={() => closeNav()}>
             <ProfilePicture />
           </StyledLink>
-          <StyledLink to='/profile' onPress={() => closeNav()}>
-            <Name isNightModeOn={isNightModeOn}>My Profile</Name>
-          </StyledLink>
+          <ProfileLink
+            to='/profile'
+            onPress={() => closeNav()}
+            component={StyledButton}
+            activeOpacity={0.7}>
+            <>
+              <UserIcon name='user' isNightModeOn={isNightModeOn} />
+              <Name isNightModeOn={isNightModeOn}>My Profile</Name>
+            </>
+          </ProfileLink>
         </Header>
         <LinksContainer>
           <Links
             data={links}
             renderItem={({ item }) => (
-              <StyledLink to={item.path} onPress={() => closeNav()}>
+              <StyledLink
+                component={StyledButton}
+                activeOpacity={0.7}
+                to={item.path}
+                onPress={() => closeNav()}>
                 <>
                   {item.icon}
                   <LinkText isNightModeOn={isNightModeOn}>{item.name}</LinkText>
@@ -109,6 +130,7 @@ const Name = styled.Text`
 
 const LinksContainer = styled.SafeAreaView`
   align-items: center;
+  padding-right: 15px;
 `;
 
 const Links = styled.FlatList``;
@@ -125,16 +147,29 @@ const StyledLink = styled(Link)`
   align-items: center;
 `;
 
+const ProfileLink = styled(Link)`
+  margin-bottom: 15px;
+  flex-direction: row;
+`;
+
 const HomeIcon = styled(Home)`
   font-size: 30px;
-  color: #050505;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
   margin-right: 5px;
 `;
 
 const WeightsIcon = styled(Weights)`
   font-size: 30px;
-  color: #050505;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
   margin-right: 5px;
 `;
+
+const UserIcon = styled(User)`
+  font-size: 30px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
+  margin-right: 5px;
+`;
+
+const StyledButton = styled.TouchableOpacity``;
 
 export default Drawer;

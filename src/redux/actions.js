@@ -33,3 +33,7 @@ export const setWorkouts = workouts => {
 export const incrementReFetch = () => {
   return { type: 'INCREMENT_REFETCH' };
 };
+
+export const decrementTimer = () => {
+  return { type: 'DECREMENT_TIMER' };
+};

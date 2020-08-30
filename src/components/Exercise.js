@@ -20,17 +20,18 @@ const Exercise = ({ name, sets, reps, weight, workoutName, exercises }) => {
       <TrashIcon name='trash' />
     </LeftAction>
   );
+  const onSwipeLeft = () => {
+    deleteExercise(
+      `http://10.0.0.12:8000/workouts/${workoutName}`,
+      exercises,
+      name,
+    );
+    dispatch(incrementReFetch());
+  };
   return (
     <Swipeable
       renderLeftActions={leftActions}
-      onSwipeableLeftOpen={() => {
-        deleteExercise(
-          `http://10.0.0.12:8000/workouts/${workoutName}`,
-          exercises,
-          name,
-        );
-        dispatch(incrementReFetch());
-      }}>
+      onSwipeableLeftOpen={onSwipeLeft}>
       <Container isNightModeOn={isNightModeOn} width={width - 10}>
         <FlexWrapper>
           <Title isNightModeOn={isNightModeOn}>{name}</Title>

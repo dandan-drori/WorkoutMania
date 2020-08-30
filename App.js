@@ -10,6 +10,7 @@ import Home from './src/components/Home';
 import Settings from './src/components/Settings';
 import Workouts from './src/components/Workouts';
 import Exercises from './src/components/Exercises';
+import WorkoutMode from './src/components/WorkoutMode';
 
 const store = createStore(reducer);
 
@@ -34,8 +35,11 @@ const App = () => {
           <Route path='/profile/dashboard' exact>
             {/* <Dashboard /> */}
           </Route>
-          <Route path='/workouts/:name'>
+          <Route path='/workouts/:name' exact>
             <Exercises />
+          </Route>
+          <Route path='/workouts/:name/workout-mode' exact>
+            <WorkoutMode />
           </Route>
           <Route path='/settings' exact>
             <Settings />
