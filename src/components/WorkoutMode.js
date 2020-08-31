@@ -15,6 +15,7 @@ import Exit from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { lightTheme, darkTheme } from '../style/GlobalStyle';
 import { getExercises } from '../utils/utils';
+import LottieView from 'lottie-react-native';
 
 const WorkoutMode = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
@@ -383,34 +384,45 @@ const WorkoutMode = () => {
               </>
             )}
           </ScrollWrapper>
-          <ActionsContainer
-            isNightModeOn={isNightModeOn}
-            isActionsMenuOpen={isActionsMenuOpen}>
-            <Animated.FlatList
-              data={actionsList}
-              renderItem={({ item }) => (
-                <Action
-                  key={item.key}
-                  onPress={() => item.action()}
-                  activeOpacity={0.7}>
-                  {item.icon}
-                </Action>
-              )}
-              style={{ position: 'relative', bottom: slideAnim }}
-            />
-          </ActionsContainer>
-          <ActionsButton
-            setIsActionsMenuOpen={setIsActionsMenuOpen}
-            isActionsMenuOpen={isActionsMenuOpen}
-            slideIn={slideIn}
-            slideOut={slideOut}
-          />
         </>
       ) : (
         <>
-          <Title isNightModeOn={isNightModeOn}>Workout Completed!</Title>
+          <ScrollWrapper>
+            <Completed isNightModeOn={isNightModeOn}>
+              Workout Completed!
+            </Completed>
+          </ScrollWrapper>
+          <LottieView
+            source={require('../../assets/animations/confetti.json')}
+            autoPlay
+            loop
+          />
         </>
       )}
+      <>
+        <ActionsContainer
+          isNightModeOn={isNightModeOn}
+          isActionsMenuOpen={isActionsMenuOpen}>
+          <Animated.FlatList
+            data={actionsList}
+            renderItem={({ item }) => (
+              <Action
+                key={item.key}
+                onPress={() => item.action()}
+                activeOpacity={0.7}>
+                {item.icon}
+              </Action>
+            )}
+            style={{ position: 'relative', bottom: slideAnim }}
+          />
+        </ActionsContainer>
+        <ActionsButton
+          setIsActionsMenuOpen={setIsActionsMenuOpen}
+          isActionsMenuOpen={isActionsMenuOpen}
+          slideIn={slideIn}
+          slideOut={slideOut}
+        />
+      </>
     </Container>
   );
 };
@@ -519,4 +531,9 @@ const ExitIcon = styled(Exit)`
 const StyledIcon = styled(Icon)`
   color: #aa00ff;
   font-size: 25px;
+`;
+
+const Completed = styled(Title)`
+  font-size: 30px;
+  margin-top: 65px;
 `;
