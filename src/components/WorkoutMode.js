@@ -179,6 +179,8 @@ const WorkoutMode = () => {
                             isSetsButtonPressed={isSetsButtonPressed.one}
                             activeOpacity={0.7}
                             onPress={() => {
+                              setRestTimer(90);
+                              setRestTimerKey(restTimerKey + 1);
                               dispatch(incrementCurrentExerciseIndex());
                               setIsRestCountdownRunning(true);
                               setIsSetsButtonPressed({
@@ -194,6 +196,8 @@ const WorkoutMode = () => {
                               isSetsButtonPressed={isSetsButtonPressed.two}
                               activeOpacity={0.7}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -209,6 +213,8 @@ const WorkoutMode = () => {
                               activeOpacity={0.7}
                               disabled={!isSetsButtonPressed.two}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 dispatch(incrementCurrentExerciseIndex());
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
@@ -227,6 +233,8 @@ const WorkoutMode = () => {
                               isSetsButtonPressed={isSetsButtonPressed.four}
                               activeOpacity={0.7}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -242,6 +250,8 @@ const WorkoutMode = () => {
                               activeOpacity={0.7}
                               disabled={!isSetsButtonPressed.four}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -264,7 +274,11 @@ const WorkoutMode = () => {
                                   dispatch(incrementCurrentExerciseIndex());
                                 } else {
                                   setIsWorkoutCompleted(true);
+                                  dispatch(resetCurrentExerciseIndex());
+                                  dispatch(resetTimer());
                                 }
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -282,6 +296,8 @@ const WorkoutMode = () => {
                               isSetsButtonPressed={isSetsButtonPressed.seven}
                               activeOpacity={0.7}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -297,6 +313,8 @@ const WorkoutMode = () => {
                               activeOpacity={0.7}
                               disabled={!isSetsButtonPressed.seven}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -312,6 +330,8 @@ const WorkoutMode = () => {
                               activeOpacity={0.7}
                               disabled={!isSetsButtonPressed.eight}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
                                   ...isSetsButtonPressed,
@@ -327,6 +347,8 @@ const WorkoutMode = () => {
                               activeOpacity={0.7}
                               disabled={!isSetsButtonPressed.nine}
                               onPress={() => {
+                                setRestTimer(90);
+                                setRestTimerKey(restTimerKey + 1);
                                 dispatch(incrementCurrentExerciseIndex());
                                 setIsRestCountdownRunning(true);
                                 setIsSetsButtonPressed({
