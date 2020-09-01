@@ -57,6 +57,8 @@ const Workouts = () => {
     },
   ];
 
+  // TODO: alert((now - 1598885904284) / 1000 / 60);
+
   return (
     <Container isNightModeOn={isNightModeOn}>
       <Title isNightModeOn={isNightModeOn}>Workouts</Title>
@@ -66,7 +68,11 @@ const Workouts = () => {
         <List
           data={workouts}
           renderItem={({ item }) => (
-            <Workout name={item.name} key={item.name} />
+            <Workout
+              name={item.name}
+              key={item.name}
+              createdAt={item.createdAt}
+            />
           )}
           keyExtractor={item => item.name}
         />

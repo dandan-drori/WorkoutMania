@@ -34,7 +34,7 @@ const Exercise = ({ name, sets, reps, weight, workoutName, exercises }) => {
       onSwipeableLeftOpen={onSwipeLeft}>
       <Container isNightModeOn={isNightModeOn} width={width - 10}>
         <FlexWrapper>
-          <Title isNightModeOn={isNightModeOn}>{name}</Title>
+          <Name isNightModeOn={isNightModeOn}>{name}</Name>
           <ButtonsContainer>
             <DropsetButton
               bgColor='#ff3388aa'
@@ -76,6 +76,7 @@ const Container = styled.View`
 const FlexWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ButtonsContainer = styled.View`
@@ -106,6 +107,12 @@ const ButtonText = styled.Text`
 const Title = styled.Text`
   color: ${({ isNightModeOn }) => (isNightModeOn ? darkTheme : lightTheme)};
   font-size: 20px;
+`;
+
+const Name = styled.Text`
+  color: ${({ isNightModeOn }) => (isNightModeOn ? darkTheme : lightTheme)};
+  font-size: 20px;
+  max-width: 300px;
 `;
 
 const LeftAction = styled.View`
