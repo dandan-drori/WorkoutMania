@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
 import { useSelector, useDispatch } from 'react-redux';
 import CountDown from 'react-native-countdown-component';
-import { useHistory, useParams } from 'react-router-native';
+import { useNavigation } from '@react-navigation/native';
 import {
   decrementTimer,
   incrementCurrentExerciseIndex,
@@ -17,7 +17,7 @@ import { lightTheme, darkTheme } from '../style/GlobalStyle';
 import { getExercises } from '../utils/utils';
 import LottieView from 'lottie-react-native';
 
-const WorkoutMode = () => {
+const WorkoutMode = ({ route }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const timer = useSelector(state => state.workoutMode.timer);
   const currentExerciseIndex = useSelector(
@@ -29,8 +29,8 @@ const WorkoutMode = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [restTimer, setRestTimer] = useState(90);
   const [restTimerKey, setRestTimerKey] = useState(1);
-  const history = useHistory();
-  const { name } = useParams();
+  const { name } = route.params;
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [isCountdownRunning, setIsCountdownRunning] = useState(true);
   const [isRestCountdownRunning, setIsRestCountdownRunning] = useState(false);
@@ -61,7 +61,7 @@ const WorkoutMode = () => {
       key: '1',
       icon: <ExitIcon name='exit-outline' />,
       action: () => {
-        history.push(`/workouts/${name}`);
+        navigation.push('Workout', { name: name });
       },
     },
     {
@@ -131,7 +131,7 @@ const WorkoutMode = () => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `http://10.0.0.12:8000/workouts/${name}`,
+      `http://192.168.1.18:8000/workouts/${name}`,
       setExercises,
       setIsLoading,
     );

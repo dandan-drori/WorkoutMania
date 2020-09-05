@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
-import { useParams, useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import Exercise from './Exercise';
@@ -10,15 +9,14 @@ import AddExercise from './modals/AddExercise';
 import { getExercises } from '../utils/utils';
 import ActionsButton from './ActionsButton';
 
-const Exercises = () => {
-  const history = useHistory();
+const Exercises = ({ route, navigation }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const reFetch = useSelector(state => state.reFetch.reFetch);
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { name } = useParams();
+  const { name } = route.params;
   const slideAnim = useRef(new Animated.Value(-255)).current;
 
   const actionsList = [
@@ -33,7 +31,7 @@ const Exercises = () => {
       key: '2',
       icon: <Icon name='play' color='#aa00ff' size={30} />,
       action: () => {
-        history.push(`/workouts/${name}/workout-mode`);
+        navigation.push('WorkoutMode', { name: name });
       },
     },
   ];
@@ -41,7 +39,7 @@ const Exercises = () => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `http://10.0.0.12:8000/workouts/${name}`,
+      `http://192.168.1.18:8000/workouts/${name}`,
       setExercises,
       setIsLoading,
     );

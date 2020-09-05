@@ -10,7 +10,7 @@ import ActionsButton from './ActionsButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AddWorkout from './modals/AddWorkout';
 
-const Workouts = () => {
+const Workouts = ({ navigation }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const workouts = useSelector(state => state.workouts);
   const reFetch = useSelector(state => state.reFetch.reFetch);
@@ -23,7 +23,7 @@ const Workouts = () => {
   useEffect(() => {
     setIsLoading(true);
     getData(
-      'http://10.0.0.12:8000/workouts',
+      'http://192.168.1.18:8000/workouts',
       dispatch,
       setWorkouts,
       setIsLoading,
@@ -56,8 +56,6 @@ const Workouts = () => {
       },
     },
   ];
-
-  // TODO: alert((now - 1598885904284) / 1000 / 60);
 
   return (
     <Container isNightModeOn={isNightModeOn}>

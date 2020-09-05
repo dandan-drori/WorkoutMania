@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Foundation';
 import { deleteData } from '../utils/utils';
 import { incrementReFetch } from '../redux/actions';
+import { useNavigation } from '@react-navigation/native';
 
 const Workout = ({ name, createdAt }) => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const [now, setNow] = useState(null);
@@ -32,26 +33,32 @@ const Workout = ({ name, createdAt }) => {
       renderLeftActions={leftActions}
       onSwipeableLeftOpen={onSwipeLeft}>
       <Container
-        component={StyledButton}
         isNightModeOn={isNightModeOn}
-        to={{ pathname: `/workouts/${name}` }}
+        onPress={() => {
+          navigation.push('Workout', { name: name });
+        }}
         activeOpacity={0.9}>
         <Title isNightModeOn={isNightModeOn}>{name}</Title>
         {createdAt && (
           <CreatedAt isNightModeOn={isNightModeOn}>
-            {(now - createdAt) / 1000 / 60 < 1
+            {Number(now - createdAt) / 1000 / 60 < 1
               ? 'Less Than A Minute Ago'
-              : (now - createdAt) / 1000 / 60 / 60 > 1 &&
-                (now - createdAt) / 1000 / 60 / 60 < 24
-              ? ((now - createdAt) / 1000 / 60 / 60).toFixed(0) + ' Hours Ago'
-              : (now - createdAt) / 1000 / 60 / 60 / 24 > 1 &&
-                (now - createdAt) / 1000 / 60 < 60 / 24 < 30
-              ? ((now - createdAt) / 1000 / 60 < 1).toFixed(0) + ' Days Ago'
-              : (now - createdAt) / 1000 / 60 / 60 / 24 / 30 > 1 &&
-                (now - createdAt) / 1000 / 60 / 60 / 24 / 30 < 12
-              ? ((now - createdAt) / 1000 / 60 / 60 / 24 / 30).toFixed(0) +
-                ' Months Ago'
-              : ((now - createdAt) / 1000 / 60).toFixed(0) + ' Minutes Ago'}
+              : Number(now - createdAt) / 1000 / 60 / 60 > 1 &&
+                Number(now - createdAt) / 1000 / 60 / 60 < 24
+              ? (Number(now - createdAt) / 1000 / 60 / 60).toFixed(0) +
+                ' Hours Ago'
+              : Number(now - createdAt) / 1000 / 60 / 60 / 24 > 1 &&
+                Number(now - createdAt) / 1000 / 60 < 60 / 24 < 30
+              ? (Number(now - createdAt) / 1000 / 60 / 60 / 24).toFixed(0) +
+                ' Days Ago'
+              : Number(now - createdAt) / 1000 / 60 / 60 / 24 / 30 > 1 &&
+                Number(now - createdAt) / 1000 / 60 / 60 / 24 / 30 < 12
+              ? (Number(now - createdAt) / 1000 / 60 / 60 / 24 / 30).toFixed(
+                  0,
+                  null,
+                ) + ' Months Ago'
+              : (Number(now - createdAt) / 1000 / 60).toFixed(0) +
+                ' Minutes Ago'}
           </CreatedAt>
         )}
       </Container>
@@ -61,7 +68,7 @@ const Workout = ({ name, createdAt }) => {
 
 export default Workout;
 
-const Container = styled(Link)`
+const Container = styled.TouchableOpacity`
   background-color: ${({ isNightModeOn }) =>
     isNightModeOn ? lightTheme : darkTheme};
   border-radius: 15px;
@@ -84,8 +91,6 @@ const CreatedAt = styled.Text`
   color: ${({ isNightModeOn }) => (isNightModeOn ? '#888' : '#ddd')};
   max-width: 200px;
 `;
-
-const StyledButton = styled.TouchableOpacity``;
 
 const LeftAction = styled.View`
   background-color: #ff0000;

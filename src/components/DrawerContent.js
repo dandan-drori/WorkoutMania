@@ -11,8 +11,9 @@ import { openDrawer, closeDrawer } from '../redux/actions';
 import Home from 'react-native-vector-icons/Entypo';
 import Weights from 'react-native-vector-icons/MaterialCommunityIcons';
 import User from 'react-native-vector-icons/FontAwesome';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 
-const Drawer = () => {
+const DrawerContent = () => {
   const dispatch = useDispatch();
   const isDrawerOpen = useSelector(state => state.drawer.isDrawerOpen);
   const slideAnim = useRef(new Animated.Value(-500)).current;
@@ -172,4 +173,4 @@ const UserIcon = styled(User)`
 
 const StyledButton = styled.TouchableOpacity``;
 
-export default Drawer;
+export default DrawerContent;

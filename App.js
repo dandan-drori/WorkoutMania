@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler';
 import 'react-native-gesture-handler';
 import React from 'react';
-import { NativeRouter as Router, Switch, Route } from 'react-router-native';
-import Drawer from './src/components/Drawer';
+import Hamburger from './src/components/Hamburger';
+import DrawerContent from './src/components/DrawerContent';
 import Header from './src/components/Header';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -15,59 +15,53 @@ import Exercises from './src/components/Exercises';
 import WorkoutMode from './src/components/WorkoutMode';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, Button } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Workout from './src/components/Workout';
 
 const store = createStore(reducer);
-
+const DrawerNavigator = createDrawerNavigator();
 const Stack = createStackNavigator();
+
+const HomeStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Home'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#aa00ff' },
+        headerTintColor: '#fff',
+        headerTitleStyle: 'bold',
+        headerLeft: props => <Hamburger {...props} />,
+      }}>
+      <Stack.Screen name='Home' component={Home} />
+    </Stack.Navigator>
+  );
+};
+const WorkoutsStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Workouts'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#aa00ff' },
+        headerTintColor: '#fff',
+        headerTitleStyle: 'bold',
+        headerLeft: props => <Hamburger {...props} />,
+      }}>
+      <Stack.Screen name='Workouts' component={Workouts} />
+      <Stack.Screen name='Workout' component={Exercises} />
+      <Stack.Screen name='WorkoutMode' component={WorkoutMode} />
+    </Stack.Navigator>
+  );
+};
 
 const App = () => {
   return (
-    // <Provider store={store}>
-    //   <Router>
-    //     <Header />
-    //     <Switch>
-    //       <Route path='/' exact>
-    //         <Home />
-    //       </Route>
-    //       <Route path='/workouts' exact>
-    //         <Workouts />
-    //       </Route>
-    //       <Route path='/workouts/log' exact>
-    //         {/* <Log /> */}
-    //       </Route>
-    //       <Route path='/profile' exact>
-    //         <Profile />
-    //       </Route>
-    //       <Route path='/profile/dashboard' exact>
-    //         {/* <Dashboard /> */}
-    //       </Route>
-    //       <Route path='/workouts/:name' exact>
-    //         <Exercises />
-    //       </Route>
-    //       <Route path='/workouts/:name/workout-mode' exact>
-    //         <WorkoutMode />
-    //       </Route>
-    //       <Route path='/settings' exact>
-    //         <Settings />
-    //       </Route>
-    //     </Switch>
-    //     <Drawer />
-    //   </Router>
-    // </Provider>
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName='Home'
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: '#aa00ff',
-            },
-            headerTintColor: '#fff',
-          }}>
-          <Stack.Screen name='Home' component={Home} />
-          <Stack.Screen name='Workouts' component={Workouts} />
-        </Stack.Navigator>
+        <DrawerNavigator.Navigator
+          drawerContent={props => <DrawerContent {...props} />}>
+          <DrawerNavigator.Screen name='Home' component={HomeStack} />
+          <DrawerNavigator.Screen name='Workouts' component={WorkoutsStack} />
+        </DrawerNavigator.Navigator>
       </NavigationContainer>
     </Provider>
   );
