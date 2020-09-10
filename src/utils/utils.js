@@ -65,3 +65,68 @@ export const getExercises = async (url, setData, setIsLoading) => {
   setData(json.workout[0].exercises);
   setIsLoading(false);
 };
+
+export const updateDropset = async (url, exercises, exerciseName) => {
+  const newExercises = exercises.map(exercise =>
+    exercise.name === exerciseName
+      ? { ...exercise, isDropset: !exercise.isDropset }
+      : exercise,
+  );
+
+  const reqOptions = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify([
+      {
+        propName: 'exercises',
+        value: newExercises,
+      },
+    ]),
+  };
+  fetch(url, reqOptions);
+};
+
+export const updateSuperset = async (url, exercises, exerciseName) => {
+  const newExercises = exercises.map(exercise =>
+    exercise.name === exerciseName
+      ? { ...exercise, isSuperset: !exercise.isSuperset }
+      : exercise,
+  );
+
+  const reqOptions = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify([
+      {
+        propName: 'exercises',
+        value: newExercises,
+      },
+    ]),
+  };
+  fetch(url, reqOptions);
+};
+
+export const authenticateUser = async (
+  url,
+  email,
+  password,
+  dispatch,
+  setActiveUser,
+  setIsAuthSuccessful,
+  setActiveUserToken,
+) => {
+  const reqOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: password }),
+  };
+  const response = await fetch(url, reqOptions);
+  const json = await response.json();
+  if (json.message === 'Authentication process failed') {
+    dispatch(setIsAuthSuccessful(true));
+  }
+  dispatch(setActiveUser(email));
+  dispatch(setActiveUserToken(json.token));
+};
+
+export const addUser = (url, email, password, name) => {};

@@ -23,7 +23,7 @@ const Workouts = ({ navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     getData(
-      'http://192.168.1.18:8000/workouts',
+      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
       dispatch,
       setWorkouts,
       setIsLoading,
@@ -33,7 +33,7 @@ const Workouts = ({ navigation }) => {
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
-      toValue: -100,
+      toValue: -180,
       duration: 300,
       useNativeDriver: false,
     }).start();

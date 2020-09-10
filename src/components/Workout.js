@@ -20,7 +20,10 @@ const Workout = ({ name, createdAt }) => {
     </LeftAction>
   );
   const onSwipeLeft = () => {
-    deleteData('http://10.0.0.12:8000/workouts', name);
+    deleteData(
+      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
+      name,
+    );
     dispatch(incrementReFetch());
   };
 
@@ -35,7 +38,7 @@ const Workout = ({ name, createdAt }) => {
       <Container
         isNightModeOn={isNightModeOn}
         onPress={() => {
-          navigation.push('Workout', { name: name });
+          navigation.push('Exercises', { name: name });
         }}
         activeOpacity={0.9}>
         <Title isNightModeOn={isNightModeOn}>{name}</Title>

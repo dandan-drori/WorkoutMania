@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dimensions } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Foundation';
-import { deleteExercise } from '../utils/utils';
+import { deleteExercise, updateDropset, updateSuperset } from '../utils/utils';
 import { incrementReFetch } from '../redux/actions';
 
-const Exercise = ({ name, sets, reps, weight, workoutName, exercises }) => {
+const Exercise = ({
+  name,
+  sets,
+  reps,
+  weight,
+  isDropset,
+  isSuperset,
+  workoutName,
+  exercises,
+}) => {
   const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
-  const [isDropsetActive, setIsDropsetActive] = useState(false);
-  const [isSupersetActive, setIsSupersetActive] = useState(false);
   const { width } = Dimensions.get('window');
 
   const leftActions = () => (
@@ -22,12 +29,13 @@ const Exercise = ({ name, sets, reps, weight, workoutName, exercises }) => {
   );
   const onSwipeLeft = () => {
     deleteExercise(
-      `http://10.0.0.12:8000/workouts/${workoutName}`,
+      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
       exercises,
       name,
     );
     dispatch(incrementReFetch());
   };
+
   return (
     <Swipeable
       renderLeftActions={leftActions}
@@ -38,14 +46,44 @@ const Exercise = ({ name, sets, reps, weight, workoutName, exercises }) => {
           <ButtonsContainer>
             <DropsetButton
               bgColor='#ff3388aa'
-              isDropsetActive={isDropsetActive}
-              onPress={() => setIsDropsetActive(!isDropsetActive)}>
+              isDropset={isDropset}
+              onPress={() => {
+                updateDropset(
+                  `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
+                  exercises,
+                  name,
+                  {
+                    name: name,
+                    sets: sets,
+                    reps: reps,
+                    weight: weight,
+                    isDropset: !isDropset,
+                    isSuperset: isSuperset,
+                  },
+                );
+                dispatch(incrementReFetch());
+              }}>
               <ButtonText color='#ee3300ee'>D</ButtonText>
             </DropsetButton>
             <SupersetButton
               bgColor='#88bb33aa'
-              isSupersetActive={isSupersetActive}
-              onPress={() => setIsSupersetActive(!isSupersetActive)}>
+              isSuperset={isSuperset}
+              onPress={() => {
+                updateSuperset(
+                  `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
+                  exercises,
+                  name,
+                  {
+                    name: name,
+                    sets: sets,
+                    reps: reps,
+                    weight: weight,
+                    isDropset: !isDropset,
+                    isSuperset: isSuperset,
+                  },
+                );
+                dispatch(incrementReFetch());
+              }}>
               <ButtonText color='#77cc22ee'>S</ButtonText>
             </SupersetButton>
           </ButtonsContainer>
@@ -89,14 +127,14 @@ const DropsetButton = styled.TouchableHighlight`
   background-color: ${({ bgColor }) => bgColor};
   border-radius: 50px;
   padding: 0px 8px;
-  opacity: ${({ isDropsetActive }) => (isDropsetActive ? '1' : '0.3')};
+  opacity: ${({ isDropset }) => (isDropset ? '1' : '0.3')};
 `;
 
 const SupersetButton = styled.TouchableHighlight`
   background-color: ${({ bgColor }) => bgColor};
   border-radius: 50px;
   padding: 0px 8px;
-  opacity: ${({ isSupersetActive }) => (isSupersetActive ? '1' : '0.3')};
+  opacity: ${({ isSuperset }) => (isSuperset ? '1' : '0.3')};
 `;
 
 const ButtonText = styled.Text`

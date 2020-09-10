@@ -39,7 +39,7 @@ const Exercises = ({ route, navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `http://192.168.1.18:8000/workouts/${name}`,
+      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${name}`,
       setExercises,
       setIsLoading,
     );
@@ -76,6 +76,8 @@ const Exercises = ({ route, navigation }) => {
               reps={item.reps}
               sets={item.sets}
               key={item.name}
+              isDropset={item.isDropset}
+              isSuperset={item.isSuperset}
               workoutName={name}
               exercises={exercises}
             />

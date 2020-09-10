@@ -4,6 +4,7 @@ import { Picker } from '@react-native-community/picker';
 import { addExercise } from '../../utils/utils';
 import { useDispatch } from 'react-redux';
 import { incrementReFetch } from '../../redux/actions';
+import CheckBox from '@react-native-community/checkbox';
 
 const AddExercise = ({
   isModalOpen,
@@ -18,15 +19,23 @@ const AddExercise = ({
     sets: '',
     reps: '',
     weight: '',
+    isDropset: false,
+    isSuperset: false,
   });
 
   const handleSubmit = () => {
-    addExercise(`http://10.0.0.12:8000/workouts/${workoutName}`, exercises, {
-      name: formState.name,
-      sets: formState.sets,
-      reps: formState.reps,
-      weight: formState.weight,
-    });
+    addExercise(
+      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
+      exercises,
+      {
+        name: formState.name,
+        sets: formState.sets,
+        reps: formState.reps,
+        weight: formState.weight,
+        isDropset: formState.isDropset,
+        isSuperset: formState.isSuperset,
+      },
+    );
     setIsModalOpen(false);
     setIsActionsMenuOpen(false);
     dispatch(incrementReFetch());
@@ -35,6 +44,8 @@ const AddExercise = ({
       sets: '',
       reps: '',
       weight: '',
+      isDropset: false,
+      isSuperset: false,
     });
   };
 
@@ -95,6 +106,26 @@ const AddExercise = ({
             value={formState.weight}
             onChangeText={text => setFormState({ ...formState, weight: text })}
           />
+          <LabelContainer isModalOpen={isModalOpen}>
+            <LabelText isModalOpen={isModalOpen}>Dropset: </LabelText>
+            <Checkbox
+              isModalOpen={isModalOpen}
+              value={formState.isDropset}
+              onValueChange={newValue =>
+                setFormState({ ...formState, isDropset: newValue })
+              }
+            />
+          </LabelContainer>
+          <LabelContainer isModalOpen={isModalOpen}>
+            <LabelText isModalOpen={isModalOpen}>Superset: </LabelText>
+            <Checkbox
+              isModalOpen={isModalOpen}
+              value={formState.isSuperset}
+              onValueChange={newValue =>
+                setFormState({ ...formState, isSuperset: newValue })
+              }
+            />
+          </LabelContainer>
         </>
         <ActionsContainer isModalOpen={isModalOpen}>
           <Action onPress={() => handleSubmit()} isModalOpen={isModalOpen}>
@@ -176,4 +207,8 @@ const LabelContainer = styled.View`
 const LabelText = styled.Text`
   font-size: 17px;
   display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
+`;
+
+const Checkbox = styled(CheckBox)`
+  opacity: ${({ isModalOpen }) => (isModalOpen ? '1' : '0')};
 `;

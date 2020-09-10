@@ -9,7 +9,10 @@ const AddWorkout = ({ isModalOpen, setIsModalOpen, setIsActionsMenuOpen }) => {
   const [name, setName] = useState('');
 
   const handleSubmit = () => {
-    postData('http://10.0.0.12:8000/workouts', name);
+    postData(
+      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
+      name,
+    );
     setIsModalOpen(false);
     setIsActionsMenuOpen(false);
     dispatch(incrementReFetch());

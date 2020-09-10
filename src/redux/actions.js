@@ -49,3 +49,15 @@ export const resetCurrentExerciseIndex = () => {
 export const resetTimer = () => {
   return { type: 'RESET_TIMER' };
 };
+
+export const setActiveUser = email => {
+  return { type: 'SET_ACTIVE_USER', payload: email };
+};
+
+export const setActiveUserToken = token => {
+  return { type: 'SET_ACTIVE_USER_TOKEN', payload: token };
+};
+
+export const setIsAuthSuccessful = isAuthSuccessful => {
+  return { type: 'SET_IS_AUTH_SUCCESSFUL', payload: isAuthSuccessful };
+};

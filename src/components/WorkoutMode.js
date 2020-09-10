@@ -61,7 +61,7 @@ const WorkoutMode = ({ route }) => {
       key: '1',
       icon: <ExitIcon name='exit-outline' />,
       action: () => {
-        navigation.push('Workout', { name: name });
+        navigation.push('Exercises', { name: name });
       },
     },
     {
@@ -131,7 +131,7 @@ const WorkoutMode = ({ route }) => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `http://192.168.1.18:8000/workouts/${name}`,
+      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${name}`,
       setExercises,
       setIsLoading,
     );

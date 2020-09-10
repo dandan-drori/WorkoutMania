@@ -39,7 +39,7 @@ export default ActionButton;
 
 const Container = styled(LinearGradient)`
   border-radius: 100px;
-  margin-bottom: 100px;
+  margin-bottom: 40px;
 `;
 
 const TouchButton = styled.TouchableOpacity`

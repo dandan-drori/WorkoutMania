@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-import 'react-native-gesture-handler';
 import React from 'react';
 import Hamburger from './src/components/Hamburger';
 import DrawerContent from './src/components/DrawerContent';
@@ -17,6 +16,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Workout from './src/components/Workout';
+import Login from './src/components/auth/Login';
+import Signup from './src/components/auth/Signup';
+import { AsyncStorage } from 'react-native';
 
 const store = createStore(reducer);
 const DrawerNavigator = createDrawerNavigator();
@@ -30,25 +32,29 @@ const HomeStack = () => {
         headerStyle: { backgroundColor: '#aa00ff' },
         headerTintColor: '#fff',
         headerTitleStyle: 'bold',
-        headerLeft: props => <Hamburger {...props} />,
+        headerRight: props => <Hamburger {...props} />,
       }}>
       <Stack.Screen name='Home' component={Home} />
+      <Stack.Screen name='Workouts' component={Workouts} />
+      <Stack.Screen name='Exercises' component={Exercises} />
+      <Stack.Screen name='WorkoutMode' component={WorkoutMode} />
+      <Stack.Screen name='Settings' component={Settings} />
+      <Stack.Screen name='Profile' component={Profile} />
     </Stack.Navigator>
   );
 };
-const WorkoutsStack = () => {
+
+const AuthStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName='Workouts'
+      initialRouteName='Home'
       screenOptions={{
         headerStyle: { backgroundColor: '#aa00ff' },
         headerTintColor: '#fff',
         headerTitleStyle: 'bold',
-        headerLeft: props => <Hamburger {...props} />,
       }}>
-      <Stack.Screen name='Workouts' component={Workouts} />
-      <Stack.Screen name='Workout' component={Exercises} />
-      <Stack.Screen name='WorkoutMode' component={WorkoutMode} />
+      <Stack.Screen name='Login' component={Login} />
+      <Stack.Screen name='Signup' component={Signup} />
     </Stack.Navigator>
   );
 };
@@ -58,9 +64,12 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <DrawerNavigator.Navigator
-          drawerContent={props => <DrawerContent {...props} />}>
-          <DrawerNavigator.Screen name='Home' component={HomeStack} />
-          <DrawerNavigator.Screen name='Workouts' component={WorkoutsStack} />
+          initialRouteName='AuthStack'
+          drawerContent={({ navigation }) => (
+            <DrawerContent navigation={navigation} />
+          )}>
+          <DrawerNavigator.Screen name='AuthStack' component={AuthStack} />
+          <DrawerNavigator.Screen name='HomeStack' component={HomeStack} />
         </DrawerNavigator.Navigator>
       </NavigationContainer>
     </Provider>

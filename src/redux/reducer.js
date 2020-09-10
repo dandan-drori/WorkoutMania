@@ -78,6 +78,22 @@ const workoutMode = (
   }
 };
 
+const auth = (
+  state = { activeUser: '', activeUserToken: '', isAuthSuccessful: false },
+  { type, payload },
+) => {
+  switch (type) {
+    case 'SET_ACTIVE_USER':
+      return { ...state, activeUser: payload };
+    case 'SET_ACTIVE_USER_TOKEN':
+      return { ...state, activeUserToken: payload };
+    case 'SET_IS_AUTH_SUCCESSFUL':
+      return { ...state, isAuthSuccessful: payload };
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
   drawer,
   nightMode,
@@ -85,5 +101,6 @@ const reducer = combineReducers({
   workouts,
   reFetch,
   workoutMode,
+  auth,
 });
 export default reducer;

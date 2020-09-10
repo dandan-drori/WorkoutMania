@@ -1,13 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { closeDrawer } from '../redux/actions';
 import styled from 'styled-components/native';
 
-const BackButton = () => {
-  const dispatch = useDispatch();
-
+const BackButton = ({ navigation }) => {
   return (
-    <Container onPress={() => dispatch(closeDrawer())}>
+    <Container onPress={() => navigation.closeDrawer()}>
       <ArrowTipLine deg={-45} top={2} />
       <ArrowTipLine deg={45} top={6} />
       <Line />
