@@ -24,6 +24,18 @@ const store = createStore(reducer);
 const DrawerNavigator = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+const HomeDrawer = () => {
+  return (
+    <DrawerNavigator.Navigator
+      initialRouteName='HomeStack'
+      drawerContent={({ navigation }) => (
+        <DrawerContent navigation={navigation} />
+      )}>
+      <DrawerNavigator.Screen name='HomeStack' component={HomeStack} />
+    </DrawerNavigator.Navigator>
+  );
+};
+
 const HomeStack = () => {
   return (
     <Stack.Navigator
@@ -47,8 +59,9 @@ const HomeStack = () => {
 const AuthStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName='Home'
+      initialRouteName='Login'
       screenOptions={{
+        headerShown: false,
         headerStyle: { backgroundColor: '#aa00ff' },
         headerTintColor: '#fff',
         headerTitleStyle: 'bold',
@@ -63,14 +76,12 @@ const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <DrawerNavigator.Navigator
+        <Stack.Navigator
           initialRouteName='AuthStack'
-          drawerContent={({ navigation }) => (
-            <DrawerContent navigation={navigation} />
-          )}>
-          <DrawerNavigator.Screen name='AuthStack' component={AuthStack} />
-          <DrawerNavigator.Screen name='HomeStack' component={HomeStack} />
-        </DrawerNavigator.Navigator>
+          screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='AuthStack' component={AuthStack} />
+          <Stack.Screen name='HomeStack' component={HomeDrawer} />
+        </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );

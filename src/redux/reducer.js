@@ -79,7 +79,13 @@ const workoutMode = (
 };
 
 const auth = (
-  state = { activeUser: '', activeUserToken: '', isAuthSuccessful: false },
+  state = {
+    activeUser: '',
+    activeUserToken: '',
+    isAuthSuccessful: false,
+    loginError: '',
+    signupError: '',
+  },
   { type, payload },
 ) => {
   switch (type) {
@@ -89,6 +95,12 @@ const auth = (
       return { ...state, activeUserToken: payload };
     case 'SET_IS_AUTH_SUCCESSFUL':
       return { ...state, isAuthSuccessful: payload };
+    case 'SET_LOGIN_ERROR':
+      return { ...state, loginError: payload };
+    case 'SET_SIGNUP_ERROR':
+      return { ...state, signupError: payload };
+    case 'SIGN_OUT':
+      return { ...state, activeUser: '', activeUserToken: '' };
     default:
       return state;
   }

@@ -61,3 +61,15 @@ export const setActiveUserToken = token => {
 export const setIsAuthSuccessful = isAuthSuccessful => {
   return { type: 'SET_IS_AUTH_SUCCESSFUL', payload: isAuthSuccessful };
 };
+
+export const setLoginError = err => {
+  return { type: 'SET_LOGIN_ERROR', payload: err };
+};
+
+export const setSignupError = err => {
+  return { type: 'SET_SIGNUP_ERROR', payload: err };
+};
+
+export const signOut = () => {
+  return { type: 'SIGN_OUT' };
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
 import BackButton from './BackButton';
 import ProfilePicture from './ProfilePicture';
@@ -7,8 +7,11 @@ import SettingsButton from './SettingsButton';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { signOut } from '../redux/actions';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const DrawerContent = ({ navigation }) => {
+  const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
 
   return (
@@ -79,9 +82,18 @@ const DrawerContent = ({ navigation }) => {
       <DrawerFooter isNightModeOn={isNightModeOn}>
         <SignoutButton
           activeOpacity={0.7}
-          onPress={() => navigation.navigate('AuthStack')}>
+          onPress={() => {
+            dispatch(signOut());
+            AsyncStorage.removeItem('token');
+            navigation.navigate('AuthStack');
+          }}>
           <>
-            <SignoutIcon name='exit-to-app' size={30} color='#000' />
+            <SignoutIcon
+              name='exit-to-app'
+              size={30}
+              color='#000'
+              isNightModeOn={isNightModeOn}
+            />
             <Label isNightModeOn={isNightModeOn}>Sign Out</Label>
           </>
         </SignoutButton>
@@ -124,6 +136,7 @@ const SignoutButton = styled.TouchableOpacity`
 const SignoutIcon = styled(StyledIcon)`
   transform: rotateZ(180deg) translateY(-4px);
   margin-right: 30px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 export default DrawerContent;

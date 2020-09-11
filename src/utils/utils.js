@@ -114,6 +114,10 @@ export const authenticateUser = async (
   setActiveUser,
   setIsAuthSuccessful,
   setActiveUserToken,
+  setError,
+  AsyncStorage,
+  navigation,
+  setIsLoading,
 ) => {
   const reqOptions = {
     method: 'POST',
@@ -123,10 +127,41 @@ export const authenticateUser = async (
   const response = await fetch(url, reqOptions);
   const json = await response.json();
   if (json.message === 'Authentication process failed') {
+    dispatch(setIsAuthSuccessful(false));
+    dispatch(setError(json.message));
+  } else {
     dispatch(setIsAuthSuccessful(true));
+    dispatch(setError(''));
+    dispatch(setActiveUser(email));
+    dispatch(setActiveUserToken(json.token));
+    AsyncStorage.setItem('token', json.token);
+    navigation.navigate('HomeStack');
   }
-  dispatch(setActiveUser(email));
-  dispatch(setActiveUserToken(json.token));
+  setIsLoading(false);
 };
 
-export const addUser = (url, email, password, name) => {};
+export const addUser = async (
+  url,
+  name,
+  email,
+  password,
+  dispatch,
+  setError,
+  navigation,
+  setIsLoading,
+) => {
+  const reqOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: password, name: name }),
+  };
+  const response = await fetch(url, reqOptions);
+  const json = await response.json();
+  if (json.message !== 'Created user successfully') {
+    dispatch(setError(json.message));
+  } else {
+    dispatch(setError(''));
+    navigation.navigate('Login');
+  }
+  setIsLoading(false);
+};
