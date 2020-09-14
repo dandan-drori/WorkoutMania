@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { darkTheme, lightTheme } from '../style/GlobalStyle';
+import { darkTheme, lightTheme } from '../../style/GlobalStyle';
 import LinearGradient from 'react-native-linear-gradient';
 
 const ActionButton = ({

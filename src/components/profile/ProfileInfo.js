@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { lightTheme, darkTheme } from '../style/GlobalStyle';
+import { lightTheme, darkTheme } from '../../style/GlobalStyle';
 import {
   setCurrentWeight,
   setCurrentHeight,
   setTargetWeight,
-} from '../redux/actions';
+} from '../../redux/actions';
 
 const ProfileInfo = () => {
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ const Label = styled.Text`
 const Input = styled.TextInput`
   border-color: ${({ isNightModeOn }) =>
     isNightModeOn ? lightTheme : darkTheme};
-  border-width: 1px;
+  border-width: 0.5px;
   padding: 0 5px;
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
   width: 11%;

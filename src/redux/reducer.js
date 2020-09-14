@@ -82,6 +82,7 @@ const auth = (
   state = {
     activeUser: '',
     activeUserToken: '',
+    activeUserData: { name: 'Guest User' },
     isAuthSuccessful: false,
     loginError: '',
     signupError: '',
@@ -93,6 +94,8 @@ const auth = (
       return { ...state, activeUser: payload };
     case 'SET_ACTIVE_USER_TOKEN':
       return { ...state, activeUserToken: payload };
+    case 'SET_ACTIVE_USER_DATA':
+      return { ...state, activeUserData: payload };
     case 'SET_IS_AUTH_SUCCESSFUL':
       return { ...state, isAuthSuccessful: payload };
     case 'SET_LOGIN_ERROR':

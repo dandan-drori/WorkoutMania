@@ -1,25 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import ProfilePicture from './ProfilePicture';
-import { lightTheme, darkTheme } from '../style/GlobalStyle';
+import { lightTheme, darkTheme } from '../../style/GlobalStyle';
 import Icon from 'react-native-vector-icons/AntDesign';
 import ProfileInfo from './ProfileInfo';
+import ProfilePreferences from './ProfilePreferences';
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
+  const activeUserData = useSelector(state => state.auth.activeUserData);
 
   const links = [
     {
       key: '1',
-      path: '/dashboard',
       name: 'Dashboard',
       icon: <DashboardIcon name='dashboard' />,
     },
     {
       key: '2',
-      path: '/placeholder',
       name: 'Placeholder',
       icon: <DashboardIcon name='dashboard' />,
     },
@@ -29,29 +28,33 @@ const Profile = () => {
     <Container isNightModeOn={isNightModeOn}>
       <Header>
         <ProfilePicture />
-        <Name isNightModeOn={isNightModeOn}>My Name</Name>
+        <Name isNightModeOn={isNightModeOn}>{activeUserData.name}</Name>
       </Header>
       <StyledHeader isNightModeOn={isNightModeOn}>Links</StyledHeader>
       <Links
         horizontal
         data={links}
         renderItem={({ item }) => (
-          <StyledLink to={item.path} isNightModeOn={isNightModeOn}>
+          <Link
+            onPress={() => navigation.navigate(item.name)}
+            isNightModeOn={isNightModeOn}>
             <>
               {item.icon}
               <LinkText isNightModeOn={isNightModeOn}>{item.name}</LinkText>
             </>
-          </StyledLink>
+          </Link>
         )}
       />
       <StyledHeader isNightModeOn={isNightModeOn}>Info</StyledHeader>
       <ProfileInfo />
+      <ProfilePreferences />
     </Container>
   );
 };
 
 const Container = styled.View`
   padding: 15px;
+  flex: 1;
   background-color: ${({ isNightModeOn }) =>
     isNightModeOn ? darkTheme : lightTheme};
 `;
@@ -74,9 +77,10 @@ const DashboardIcon = styled(Icon)`
 
 const Links = styled.FlatList`
   margin-top: 10px;
+  flex-grow: 0;
 `;
 
-const StyledLink = styled(Link)`
+const Link = styled.TouchableOpacity`
   border-width: 1px;
   border-color: ${({ isNightModeOn }) =>
     isNightModeOn ? lightTheme : darkTheme};
@@ -86,6 +90,7 @@ const StyledLink = styled(Link)`
   align-items: center;
   margin-right: 10px;
   padding: 5px;
+  height: 80px;
 `;
 
 const LinkText = styled.Text`

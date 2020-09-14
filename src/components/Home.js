@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { lightTheme, darkTheme } from '../style/GlobalStyle';
+import { setActiveUserData } from '../redux/actions';
+import { getActiveUserData } from '../utils/utils';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Home = () => {
+  const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
+
+  useEffect(() => {
+    const getActiveUserEmail = async () => {
+      const activeUserEmail = await AsyncStorage.getItem('email');
+      getActiveUserData(
+        `http://10.0.0.12:8000/users/${activeUserEmail}`,
+        dispatch,
+        setActiveUserData,
+      );
+    };
+    getActiveUserEmail();
+  }, [dispatch]);
 
   return (
     <Container isNightModeOn={isNightModeOn}>

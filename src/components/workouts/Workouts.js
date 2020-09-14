@@ -1,53 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
-import { useSelector } from 'react-redux';
-import { darkTheme, lightTheme } from '../style/GlobalStyle';
-import Exercise from './Exercise';
+import { useSelector, useDispatch } from 'react-redux';
+import { darkTheme, lightTheme } from '../../style/GlobalStyle';
+import { getData } from '../../utils/utils';
+import { setWorkouts } from '../../redux/actions';
+import Workout from './Workout';
+import { ActivityIndicator, Animated } from 'react-native';
+import ActionsButton from '../universal/ActionsButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Animated, ActivityIndicator } from 'react-native';
-import AddExercise from './modals/AddExercise';
-import { getExercises } from '../utils/utils';
-import ActionsButton from './ActionsButton';
+import AddWorkout from '../modals/AddWorkout';
 
-const Exercises = ({ route, navigation }) => {
+const Workouts = ({ navigation }) => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
+  const workouts = useSelector(state => state.workouts);
   const reFetch = useSelector(state => state.reFetch.reFetch);
-  const [exercises, setExercises] = useState([]);
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { name } = route.params;
-  const slideAnim = useRef(new Animated.Value(-255)).current;
-
-  const actionsList = [
-    {
-      key: '1',
-      icon: <Icon name='plus' color='#aa00ff' size={30} />,
-      action: () => {
-        setIsAddModalOpen(true);
-      },
-    },
-    {
-      key: '2',
-      icon: <Icon name='play' color='#aa00ff' size={30} />,
-      action: () => {
-        navigation.push('WorkoutMode', { name: name });
-      },
-    },
-  ];
+  const slideAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     setIsLoading(true);
-    getExercises(
-      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${name}`,
-      setExercises,
+    getData(
+      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
+      dispatch,
+      setWorkouts,
       setIsLoading,
     );
-  }, [name, reFetch]);
+    return () => setIsLoading(false);
+  }, [dispatch, reFetch]);
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
-      toValue: -100,
+      toValue: -140,
       duration: 300,
       useNativeDriver: false,
     }).start();
@@ -61,25 +47,29 @@ const Exercises = ({ route, navigation }) => {
     }).start();
   };
 
+  const actionsList = [
+    {
+      key: '1',
+      icon: <Icon name='plus' color='#aa00ff' size={30} />,
+      action: () => {
+        setIsAddModalOpen(true);
+      },
+    },
+  ];
+
   return (
     <Container isNightModeOn={isNightModeOn}>
-      <Title isNightModeOn={isNightModeOn}>{name}</Title>
+      <Title isNightModeOn={isNightModeOn}>Workouts</Title>
       {isLoading ? (
         <ActivityIndicator size='large' color='#55bbff' />
       ) : (
         <List
-          data={exercises}
+          data={workouts}
           renderItem={({ item }) => (
-            <Exercise
+            <Workout
               name={item.name}
-              weight={item.weight}
-              reps={item.reps}
-              sets={item.sets}
               key={item.name}
-              isDropset={item.isDropset}
-              isSuperset={item.isSuperset}
-              workoutName={name}
-              exercises={exercises}
+              createdAt={item.createdAt}
             />
           )}
           keyExtractor={item => item.name}
@@ -102,37 +92,35 @@ const Exercises = ({ route, navigation }) => {
       <ActionsButton
         setIsActionsMenuOpen={setIsActionsMenuOpen}
         isActionsMenuOpen={isActionsMenuOpen}
-        slideOut={slideOut}
         slideIn={slideIn}
+        slideOut={slideOut}
       />
-      <AddExercise
+      <AddWorkout
         isModalOpen={isAddModalOpen}
         setIsModalOpen={setIsAddModalOpen}
-        workoutName={name}
-        exercises={exercises}
         setIsActionsMenuOpen={setIsActionsMenuOpen}
       />
     </Container>
   );
 };
 
-export default Exercises;
+export default Workouts;
 
 const Container = styled.View`
   background-color: ${({ isNightModeOn }) =>
     isNightModeOn ? darkTheme : lightTheme};
   height: 100%;
+  padding: 5px;
   align-items: center;
-  padding-top: 20px;
 `;
 
 const Title = styled.Text`
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
-  font-size: 25px;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 30px;
   margin-bottom: 20px;
 `;
-
-const List = styled.FlatList``;
 
 const ActionsContainer = styled.View`
   position: absolute;
@@ -153,3 +141,5 @@ const Action = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
+
+const List = styled.FlatList``;

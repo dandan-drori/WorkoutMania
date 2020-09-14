@@ -1,38 +1,55 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import Hamburger from './src/components/Hamburger';
-import DrawerContent from './src/components/DrawerContent';
-import Header from './src/components/Header';
-import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import reducer from './src/redux/reducer';
-import Profile from './src/components/Profile';
-import Home from './src/components/Home';
-import Settings from './src/components/Settings';
-import Workouts from './src/components/Workouts';
-import Exercises from './src/components/Exercises';
-import WorkoutMode from './src/components/WorkoutMode';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import Workout from './src/components/Workout';
 import Login from './src/components/auth/Login';
 import Signup from './src/components/auth/Signup';
-import { AsyncStorage } from 'react-native';
+import Home from './src/components/Home';
+import Workouts from './src/components/workouts/Workouts';
+import Exercises from './src/components/workouts/Exercises';
+import WorkoutMode from './src/components/workouts/WorkoutMode';
+import Profile from './src/components/profile/Profile';
+import Settings from './src/components/Settings';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 const store = createStore(reducer);
-const DrawerNavigator = createDrawerNavigator();
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const HomeDrawer = () => {
+const HomeTabs = () => {
   return (
-    <DrawerNavigator.Navigator
-      initialRouteName='HomeStack'
-      drawerContent={({ navigation }) => (
-        <DrawerContent navigation={navigation} />
-      )}>
-      <DrawerNavigator.Screen name='HomeStack' component={HomeStack} />
-    </DrawerNavigator.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+            return <Icon name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Settings') {
+            iconName = focused ? 'settings' : 'settings-outline';
+            return <IonIcon name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Workouts') {
+            iconName = focused ? 'dumbbell' : 'dumbbell';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'account' : 'account-outline';
+          }
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#aa00ff',
+        inactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen name='Home' component={HomeStack} />
+      <Tab.Screen name='Workouts' component={WorkoutsStack} />
+      <Tab.Screen name='Profile' component={ProfileStack} />
+      <Tab.Screen name='Settings' component={SettingsStack} />
+    </Tab.Navigator>
   );
 };
 
@@ -44,14 +61,52 @@ const HomeStack = () => {
         headerStyle: { backgroundColor: '#aa00ff' },
         headerTintColor: '#fff',
         headerTitleStyle: 'bold',
-        headerRight: props => <Hamburger {...props} />,
       }}>
       <Stack.Screen name='Home' component={Home} />
+    </Stack.Navigator>
+  );
+};
+
+const WorkoutsStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Workouts'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#aa00ff' },
+        headerTintColor: '#fff',
+        headerTitleStyle: 'bold',
+      }}>
       <Stack.Screen name='Workouts' component={Workouts} />
       <Stack.Screen name='Exercises' component={Exercises} />
       <Stack.Screen name='WorkoutMode' component={WorkoutMode} />
-      <Stack.Screen name='Settings' component={Settings} />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Profile'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#aa00ff' },
+        headerTintColor: '#fff',
+        headerTitleStyle: 'bold',
+      }}>
       <Stack.Screen name='Profile' component={Profile} />
+    </Stack.Navigator>
+  );
+};
+
+const SettingsStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Settings'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#aa00ff' },
+        headerTintColor: '#fff',
+        headerTitleStyle: 'bold',
+      }}>
+      <Stack.Screen name='Settings' component={Settings} />
     </Stack.Navigator>
   );
 };
@@ -80,7 +135,7 @@ const App = () => {
           initialRouteName='AuthStack'
           screenOptions={{ headerShown: false }}>
           <Stack.Screen name='AuthStack' component={AuthStack} />
-          <Stack.Screen name='HomeStack' component={HomeDrawer} />
+          <Stack.Screen name='HomeStack' component={HomeTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

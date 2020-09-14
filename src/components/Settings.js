@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import Toggler from './Toggler';
+import Toggler from './universal/Toggler';
 import { darkTheme, lightTheme } from '../style/GlobalStyle';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { signOut } from '../redux/actions';
+import AsyncStorage from '@react-native-community/async-storage';
+import { turnNightModeOn, turnNightModeOff } from '../redux/actions';
 
-const Settings = () => {
+const Settings = ({ navigation }) => {
+  const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
 
   return (
@@ -12,15 +17,40 @@ const Settings = () => {
       <Header isNightModeOn={isNightModeOn}>Settings</Header>
       <FlexContainer>
         <Title isNightModeOn={isNightModeOn}>Toggle Night Mode</Title>
-        <Toggler />
+        <Toggler
+          isOn={isNightModeOn}
+          onAction={turnNightModeOn}
+          offAction={turnNightModeOff}
+          isUsingDispatch={true}
+        />
       </FlexContainer>
+      <ScrollWrapper>
+        <></>
+      </ScrollWrapper>
+      <SignoutButton
+        activeOpacity={0.7}
+        onPress={() => {
+          dispatch(signOut());
+          AsyncStorage.removeItem('token');
+          navigation.navigate('AuthStack');
+        }}>
+        <>
+          <SignoutIcon
+            name='exit-to-app'
+            size={30}
+            color='#000'
+            isNightModeOn={isNightModeOn}
+          />
+          <Label isNightModeOn={isNightModeOn}>Sign Out</Label>
+        </>
+      </SignoutButton>
     </Container>
   );
 };
 
 const Container = styled.View`
   padding: 15px;
-  height: 100%;
+  flex: 1;
   background-color: ${({ isNightModeOn }) =>
     isNightModeOn ? darkTheme : lightTheme};
 `;
@@ -40,6 +70,23 @@ const Title = styled.Text`
 const FlexContainer = styled.View`
   flex-direction: row;
   align-items: center;
+`;
+
+const ScrollWrapper = styled.ScrollView``;
+
+const SignoutButton = styled.TouchableOpacity`
+  flex-direction: row;
+`;
+
+const SignoutIcon = styled(Icon)`
+  transform: rotateZ(180deg) translateY(-4px);
+  margin-right: 10px;
+  color: #ff4433;
+`;
+
+const Label = styled.Text`
+  color: #ff4433;
+  font-size: 15px;
 `;
 
 export default Settings;

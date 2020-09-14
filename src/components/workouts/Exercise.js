@@ -1,12 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { darkTheme, lightTheme } from '../style/GlobalStyle';
+import { darkTheme, lightTheme } from '../../style/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dimensions } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Foundation';
-import { deleteExercise, updateDropset, updateSuperset } from '../utils/utils';
-import { incrementReFetch } from '../redux/actions';
+import {
+  deleteExercise,
+  updateDropset,
+  updateSuperset,
+} from '../../utils/utils';
+import { incrementReFetch } from '../../redux/actions';
 
 const Exercise = ({
   name,

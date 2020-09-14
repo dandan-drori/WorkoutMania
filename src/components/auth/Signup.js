@@ -4,12 +4,17 @@ import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { darkTheme, lightTheme } from '../../style/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
-import { addUser } from '../../utils/utils';
+import { addUser, isValidEmail, isValidPassword } from '../../utils/utils';
 import { setSignupError } from '../../redux/actions';
-
-// TODO: add standard validation for inputs
+import Tooltip from '../universal/Tooltip';
 
 // TODO: look up usage of post and patch in netlify lambda
+
+// TODO: set user preferences in profile screen
+
+// TODO: get user preferences on initial app load and apply them with dispatch
+
+// TODO: send push notifications every time rest time is over instead of alert
 
 const Signup = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -17,6 +22,7 @@ const Signup = ({ navigation }) => {
   const error = useSelector(state => state.auth.signupError);
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isTooltipHidden, setIsTooltipHidden] = useState(true);
   const [creds, setCreds] = useState({
     name: '',
     email: '',
@@ -75,7 +81,17 @@ const Signup = ({ navigation }) => {
               />
             </FlexContainer>
             <FlexContainer>
-              <StyledIcon name='lock' />
+              <>
+                <StyledIcon name='lock' />
+                <InfoIcon
+                  name='information'
+                  onPress={() => setIsTooltipHidden(!isTooltipHidden)}
+                />
+                <Tooltip
+                  isTooltipHidden={isTooltipHidden}
+                  text='Password must be at least 8 characters long, contain a minimum of 1 lower case letter, 1 upper case letter, 1 number and 1 special character.'
+                />
+              </>
               <Input
                 value={creds.password}
                 placeholder='Password'
@@ -97,17 +113,27 @@ const Signup = ({ navigation }) => {
             <Submit
               onPress={() => {
                 setIsLoading(true);
-                addUser(
-                  'http://192.168.1.18:8000/users/signup',
-                  creds.name,
-                  creds.email,
-                  creds.password,
-                  dispatch,
-                  setSignupError,
-                  navigation,
-                  setIsLoading,
-                );
-                setCreds({ name: '', email: '', password: '' });
+                if (
+                  isValidEmail(creds.email) === true &&
+                  isValidPassword(creds.password) === true
+                ) {
+                  addUser(
+                    'http://10.0.0.12:8000/users/signup',
+                    creds.name,
+                    creds.email,
+                    creds.password,
+                    dispatch,
+                    setSignupError,
+                    navigation,
+                    setIsLoading,
+                  );
+                  setCreds({ name: '', email: '', password: '' });
+                } else {
+                  dispatch(
+                    setSignupError('Email and password combination is invalid'),
+                  );
+                  setIsLoading(false);
+                }
               }}>
               <ButtonText>Sign Up</ButtonText>
             </Submit>
@@ -204,4 +230,12 @@ const ErrorMessage = styled.Text`
   font-size: 20px;
   color: #ff4433;
   text-align: center;
+`;
+
+const InfoIcon = styled(Icon)`
+  position: absolute;
+  left: 30px;
+  top: 0;
+  font-size: 18px;
+  color: blue;
 `;

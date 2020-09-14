@@ -73,3 +73,7 @@ export const setSignupError = err => {
 export const signOut = () => {
   return { type: 'SIGN_OUT' };
 };
+
+export const setActiveUserData = data => {
+  return { type: 'SET_ACTIVE_USER_DATA', payload: data };
+};

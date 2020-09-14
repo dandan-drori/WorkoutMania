@@ -92,7 +92,7 @@ const Login = ({ navigation }) => {
               onPress={() => {
                 setIsLoading(true);
                 authenticateUser(
-                  'http://192.168.1.18:8000/users/login',
+                  'http://10.0.0.12:8000/users/login',
                   creds.email,
                   creds.password,
                   dispatch,

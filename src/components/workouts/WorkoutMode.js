@@ -8,13 +8,13 @@ import {
   incrementCurrentExerciseIndex,
   resetCurrentExerciseIndex,
   resetTimer,
-} from '../redux/actions';
-import ActionsButton from './ActionsButton';
+} from '../../redux/actions';
+import ActionsButton from '../universal/ActionsButton';
 import { Animated, ActivityIndicator } from 'react-native';
 import Exit from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { lightTheme, darkTheme } from '../style/GlobalStyle';
-import { getExercises } from '../utils/utils';
+import { lightTheme, darkTheme } from '../../style/GlobalStyle';
+import { getExercises } from '../../utils/utils';
 import LottieView from 'lottie-react-native';
 
 const WorkoutMode = ({ route }) => {
@@ -92,7 +92,7 @@ const WorkoutMode = ({ route }) => {
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
-      toValue: -30,
+      toValue: 30,
       duration: 300,
       useNativeDriver: false,
     }).start();
@@ -439,7 +439,7 @@ const WorkoutMode = ({ route }) => {
             </Completed>
           </ScrollWrapper>
           <LottieView
-            source={require('../../assets/animations/confetti.json')}
+            source={require('../../../assets/animations/confetti.json')}
             autoPlay
             loop
           />

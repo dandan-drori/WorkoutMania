@@ -135,6 +135,7 @@ export const authenticateUser = async (
     dispatch(setActiveUser(email));
     dispatch(setActiveUserToken(json.token));
     AsyncStorage.setItem('token', json.token);
+    AsyncStorage.setItem('email', email);
     navigation.navigate('HomeStack');
   }
   setIsLoading(false);
@@ -164,4 +165,61 @@ export const addUser = async (
     navigation.navigate('Login');
   }
   setIsLoading(false);
+};
+
+export const isValidEmail = email => {
+  if (
+    email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    ) === null
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const isValidPassword = password => {
+  if (
+    password.match(
+      /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}[!|@|#|$|%|^|&|*]{1,}/,
+    ) === null
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const getActiveUserData = async (url, dispatch, setActiveUserData) => {
+  const response = await fetch(url);
+  const json = await response.json();
+  dispatch(setActiveUserData(json.user[0]));
+};
+
+export const togglePreferenceState = (
+  url,
+  oldPreferences,
+  preferenceName,
+  newState,
+) => {
+  const newPreferences = oldPreferences.map(oldPreference => {
+    if (oldPreference.name === preferenceName) {
+      oldPreference.state = newState;
+    } else {
+      return oldPreference;
+    }
+  });
+  console.log(newPreferences);
+  const reqOptions = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify([
+      {
+        propName: 'preferences',
+        value: newPreferences,
+      },
+    ]),
+  };
+  fetch(url, reqOptions);
 };

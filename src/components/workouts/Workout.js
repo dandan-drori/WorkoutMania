@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { darkTheme, lightTheme } from '../style/GlobalStyle';
+import { darkTheme, lightTheme } from '../../style/GlobalStyle';
 import { useSelector, useDispatch } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Foundation';
-import { deleteData } from '../utils/utils';
-import { incrementReFetch } from '../redux/actions';
+import { deleteData } from '../../utils/utils';
+import { incrementReFetch } from '../../redux/actions';
 import { useNavigation } from '@react-navigation/native';
 
 const Workout = ({ name, createdAt }) => {
