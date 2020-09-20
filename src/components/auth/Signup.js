@@ -10,11 +10,15 @@ import Tooltip from '../universal/Tooltip';
 
 // TODO: look up usage of post and patch in netlify lambda
 
-// TODO: set user preferences in profile screen
-
-// TODO: get user preferences on initial app load and apply them with dispatch
-
 // TODO: send push notifications every time rest time is over instead of alert
+
+// TODO: add graphs to show user progress
+
+// TODO: add see active users
+
+// TODO: add chat with active users
+
+// TODO: add invite friends to a workout
 
 const Signup = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -44,12 +48,13 @@ const Signup = ({ navigation }) => {
         <ActivityIndicator size='large' color='#55bbff' />
       ) : (
         <>
-          <Title>Sign Up</Title>
+          <Title isNightModeOn={isNightModeOn}>Sign Up</Title>
           {error !== '' ? <ErrorMessage>{error}</ErrorMessage> : null}
           <FormContainer>
             <FlexContainer>
               <StyledIcon name='account' />
               <Input
+                isNightModeOn={isNightModeOn}
                 textContentType='name'
                 value={creds.name}
                 onFocus={() =>
@@ -60,12 +65,14 @@ const Signup = ({ navigation }) => {
                 }
                 isInputFocused={isInputFocused.name}
                 placeholder='Name'
+                placeholderTextColor='#aaa'
                 onChangeText={text => setCreds({ ...creds, name: text })}
               />
             </FlexContainer>
             <FlexContainer>
               <StyledIcon name='email' />
               <Input
+                isNightModeOn={isNightModeOn}
                 keyboardType='email-address'
                 textContentType='emailAddress'
                 onFocus={() =>
@@ -77,6 +84,7 @@ const Signup = ({ navigation }) => {
                 isInputFocused={isInputFocused.email}
                 value={creds.email}
                 placeholder='Email'
+                placeholderTextColor='#aaa'
                 onChangeText={text => setCreds({ ...creds, email: text })}
               />
             </FlexContainer>
@@ -93,8 +101,10 @@ const Signup = ({ navigation }) => {
                 />
               </>
               <Input
+                isNightModeOn={isNightModeOn}
                 value={creds.password}
                 placeholder='Password'
+                placeholderTextColor='#aaa'
                 onFocus={() =>
                   setIsInputFocused({ ...isInputFocused, password: true })
                 }
@@ -138,7 +148,7 @@ const Signup = ({ navigation }) => {
               <ButtonText>Sign Up</ButtonText>
             </Submit>
           </SubmitContainer>
-          <BottomMessage>
+          <BottomMessage isNightModeOn={isNightModeOn}>
             Already have an account?{' '}
             <ToLogin onPress={() => navigation.navigate('Login')}>
               <ButtonText>Login</ButtonText>
@@ -164,6 +174,7 @@ const Title = styled.Text`
   text-align: center;
   font-size: 30px;
   margin-bottom: 30px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 const FormContainer = styled.View`
@@ -175,10 +186,11 @@ const FormContainer = styled.View`
 const Input = styled.TextInput`
   width: 85%;
   border-radius: 10px;
-  border-color: ${({ isInputFocused }) =>
-    isInputFocused ? '#ffcc00' : '#000'};
+  border-color: ${({ isInputFocused, isNightModeOn }) =>
+    isInputFocused ? '#ffcc00' : isNightModeOn ? '#fff' : '#000'};
   border-width: 2px;
   padding: 10px 15px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 const Submit = styled.TouchableOpacity`
@@ -220,6 +232,7 @@ const SubmitContainer = styled.View`
 
 const BottomMessage = styled.Text`
   text-align: center;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 const ToLogin = styled.TouchableOpacity`

@@ -48,12 +48,13 @@ const Login = ({ navigation }) => {
         <ActivityIndicator size='large' color='#55bbff' />
       ) : (
         <>
-          <Title>Login</Title>
+          <Title isNightModeOn={isNightModeOn}>Login</Title>
           {error !== '' ? <ErrorMessage>{error}</ErrorMessage> : null}
           <FormContainer>
             <FlexContainer>
               <StyledIcon name='email' />
               <Input
+                isNightModeOn={isNightModeOn}
                 keyboardType='email-address'
                 onFocus={() =>
                   setIsInputFocused({ ...isInputFocused, email: true })
@@ -65,14 +66,17 @@ const Login = ({ navigation }) => {
                 textContentType='emailAddress'
                 value={creds.email}
                 placeholder='Email'
+                placeholderTextColor='#aaa'
                 onChangeText={text => setCreds({ ...creds, email: text })}
               />
             </FlexContainer>
             <FlexContainer>
               <StyledIcon name='lock' />
               <Input
+                isNightModeOn={isNightModeOn}
                 value={creds.password}
                 placeholder='Password'
+                placeholderTextColor='#aaa'
                 textContentType='password'
                 onFocus={() =>
                   setIsInputFocused({ ...isInputFocused, password: true })
@@ -109,7 +113,7 @@ const Login = ({ navigation }) => {
               <ButtonText>Login</ButtonText>
             </Submit>
           </SubmitContainer>
-          <BottomMessage>
+          <BottomMessage isNightModeOn={isNightModeOn}>
             Don't have an account?{' '}
             <ToSignup onPress={() => navigation.navigate('Signup')}>
               <ButtonText>Sign Up</ButtonText>
@@ -135,6 +139,7 @@ const Title = styled.Text`
   text-align: center;
   font-size: 30px;
   margin-bottom: 30px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 const FormContainer = styled.View`
@@ -146,10 +151,11 @@ const FormContainer = styled.View`
 const Input = styled.TextInput`
   width: 85%;
   border-radius: 10px;
-  border-color: ${({ isInputFocused }) =>
-    isInputFocused ? '#ffcc00' : '#000'};
+  border-color: ${({ isInputFocused, isNightModeOn }) =>
+    isInputFocused ? '#ffcc00' : isNightModeOn ? '#fff' : '#000'};
   border-width: 2px;
   padding: 10px 15px;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 const Submit = styled.TouchableOpacity`
@@ -191,6 +197,7 @@ const SubmitContainer = styled.View`
 
 const BottomMessage = styled.Text`
   text-align: center;
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
 `;
 
 const ToSignup = styled.TouchableOpacity`

@@ -4,15 +4,17 @@ import { useDispatch } from 'react-redux';
 import { incrementReFetch } from '../../redux/actions';
 import { postData } from '../../utils/utils';
 
-const AddWorkout = ({ isModalOpen, setIsModalOpen, setIsActionsMenuOpen }) => {
+const AddWorkout = ({
+  isModalOpen,
+  setIsModalOpen,
+  setIsActionsMenuOpen,
+  activeUserId,
+}) => {
   const dispatch = useDispatch();
   const [name, setName] = useState('');
 
   const handleSubmit = () => {
-    postData(
-      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
-      name,
-    );
+    postData('http://10.0.0.12:8000/workouts', name, activeUserId);
     setIsModalOpen(false);
     setIsActionsMenuOpen(false);
     dispatch(incrementReFetch());

@@ -1,16 +1,30 @@
-export const getData = async (url, dispatch, setData, setIsLoading) => {
+export const getData = async (
+  url,
+  dispatch,
+  setData,
+  setIsLoading,
+  activeUserId,
+) => {
   const response = await fetch(url);
   const json = await response.json();
-  dispatch(setData(json.workouts));
+  const currentUserWorkouts = json.workouts.map(workout => {
+    if (workout.user === activeUserId) {
+      return workout;
+    } else {
+      return;
+    }
+  });
+  dispatch(setData(currentUserWorkouts));
   setIsLoading(false);
 };
 
-export const postData = (url, data) => {
+export const postData = (url, workoutName, activeUserId) => {
   const reqOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      name: data,
+      name: workoutName,
+      user: activeUserId,
     }),
   };
   fetch(url, reqOptions);
@@ -201,16 +215,16 @@ export const togglePreferenceState = (
   url,
   oldPreferences,
   preferenceName,
-  newState,
+  dispatch,
+  incrementReFetch,
 ) => {
   const newPreferences = oldPreferences.map(oldPreference => {
     if (oldPreference.name === preferenceName) {
-      oldPreference.state = newState;
+      return { name: oldPreference.name, state: !oldPreference.state };
     } else {
       return oldPreference;
     }
   });
-  console.log(newPreferences);
   const reqOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -222,4 +236,5 @@ export const togglePreferenceState = (
     ]),
   };
   fetch(url, reqOptions);
+  dispatch(incrementReFetch());
 };

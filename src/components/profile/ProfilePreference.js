@@ -1,37 +1,33 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import Toggler from '../universal/Toggler';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { togglePreferenceState } from '../../utils/utils';
 import { lightTheme, darkTheme } from '../../style/GlobalStyle';
+import { incrementReFetch } from '../../redux/actions';
 
 const ProfilePreference = ({ preference }) => {
+  const dispatch = useDispatch();
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const activeUserData = useSelector(state => state.auth.activeUserData);
   const onAction = () => {
-    activeUserData.preferences.forEach(item => {
-      if (item.name === preference.name) {
-        togglePreferenceState(
-          `http://10.0.0.12:8000/users/${activeUserData.email}`,
-          activeUserData.preferences,
-          preference.name,
-          !preference.state,
-        );
-      }
-    });
+    togglePreferenceState(
+      `http://10.0.0.12:8000/users/${activeUserData.email}`,
+      activeUserData.preferences,
+      preference.name,
+      dispatch,
+      incrementReFetch,
+    );
   };
 
   const offAction = () => {
-    activeUserData.preferences.forEach(item => {
-      if (item.name === preference.name) {
-        togglePreferenceState(
-          `http://10.0.0.12:8000/users/${activeUserData.email}`,
-          activeUserData.preferences,
-          preference.name,
-          !preference.state,
-        );
-      }
-    });
+    togglePreferenceState(
+      `http://10.0.0.12:8000/users/${activeUserData.email}`,
+      activeUserData.preferences,
+      preference.name,
+      dispatch,
+      incrementReFetch,
+    );
   };
 
   return (

@@ -10,10 +10,11 @@ import ActionsButton from '../universal/ActionsButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AddWorkout from '../modals/AddWorkout';
 
-const Workouts = ({ navigation }) => {
+const Workouts = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const workouts = useSelector(state => state.workouts);
   const reFetch = useSelector(state => state.reFetch.reFetch);
+  const activeUserData = useSelector(state => state.auth.activeUserData);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
@@ -23,13 +24,14 @@ const Workouts = ({ navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     getData(
-      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
+      'http://10.0.0.12:8000/workouts',
       dispatch,
       setWorkouts,
       setIsLoading,
+      activeUserData?._id,
     );
     return () => setIsLoading(false);
-  }, [dispatch, reFetch]);
+  }, [dispatch, reFetch, activeUserData._id]);
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
@@ -67,12 +69,22 @@ const Workouts = ({ navigation }) => {
           data={workouts}
           renderItem={({ item }) => (
             <Workout
-              name={item.name}
-              key={item.name}
-              createdAt={item.createdAt}
+              name={item?.name}
+              key={item?._id}
+              createdAt={item?.createdAt}
             />
           )}
-          keyExtractor={item => item.name}
+          keyExtractor={item => item?._id}
+          renderListEmptyComponent={() => {
+            <>
+              <EmptyMessage isNightModeOn={isNightModeOn}>
+                No Workouts :(
+              </EmptyMessage>
+              <EmptyMessage isNightModeOn={isNightModeOn}>
+                Use the plus button to add a workout!
+              </EmptyMessage>
+            </>;
+          }}
         />
       )}
       <ActionsContainer isActionsMenuOpen={isActionsMenuOpen}>
@@ -99,6 +111,7 @@ const Workouts = ({ navigation }) => {
         isModalOpen={isAddModalOpen}
         setIsModalOpen={setIsAddModalOpen}
         setIsActionsMenuOpen={setIsActionsMenuOpen}
+        activeUserId={activeUserData._id}
       />
     </Container>
   );
@@ -143,3 +156,10 @@ const Action = styled.TouchableOpacity`
 `;
 
 const List = styled.FlatList``;
+
+const EmptyMessage = styled.Text`
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
+  font-size: 25px;
+  margin-bottom: 15px;
+  text-align: center;
+`;

@@ -24,18 +24,14 @@ const AddExercise = ({
   });
 
   const handleSubmit = () => {
-    addExercise(
-      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
-      exercises,
-      {
-        name: formState.name,
-        sets: formState.sets,
-        reps: formState.reps,
-        weight: formState.weight,
-        isDropset: formState.isDropset,
-        isSuperset: formState.isSuperset,
-      },
-    );
+    addExercise(`http://10.0.0.12:8000/workouts/${workoutName}`, exercises, {
+      name: formState.name,
+      sets: formState.sets,
+      reps: formState.reps,
+      weight: formState.weight,
+      isDropset: formState.isDropset,
+      isSuperset: formState.isSuperset,
+    });
     setIsModalOpen(false);
     setIsActionsMenuOpen(false);
     dispatch(incrementReFetch());

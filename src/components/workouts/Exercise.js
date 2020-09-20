@@ -33,7 +33,7 @@ const Exercise = ({
   );
   const onSwipeLeft = () => {
     deleteExercise(
-      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
+      `http://10.0.0.12:8000/workouts/${workoutName}`,
       exercises,
       name,
     );
@@ -53,7 +53,7 @@ const Exercise = ({
               isDropset={isDropset}
               onPress={() => {
                 updateDropset(
-                  `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
+                  `http://10.0.0.12:8000/workouts/${workoutName}`,
                   exercises,
                   name,
                   {
@@ -74,7 +74,7 @@ const Exercise = ({
               isSuperset={isSuperset}
               onPress={() => {
                 updateSuperset(
-                  `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${workoutName}`,
+                  `http://10.0.0.12:8000/workouts/${workoutName}`,
                   exercises,
                   name,
                   {

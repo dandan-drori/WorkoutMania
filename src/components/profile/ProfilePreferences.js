@@ -7,6 +7,7 @@ import ProfilePreference from './ProfilePreference';
 const ProfilePreferences = () => {
   const isNightModeOn = useSelector(state => state.nightMode.isNightModeOn);
   const activeUserData = useSelector(state => state.auth.activeUserData);
+
   return (
     <Container>
       <FlexWrapper>

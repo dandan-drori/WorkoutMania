@@ -39,7 +39,7 @@ const Exercises = ({ route, navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts/${name}`,
+      `http://10.0.0.12:8000/workouts/${name}`,
       setExercises,
       setIsLoading,
     );

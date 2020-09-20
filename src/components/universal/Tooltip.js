@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 const Tooltip = ({ isTooltipHidden, text }) => {
   return (
     <Container isTooltipHidden={isTooltipHidden}>
-      <SideColor />
+      <SideColor isTooltipHidden={isTooltipHidden} />
       <Title>{text}</Title>
     </Container>
   );
@@ -42,6 +42,4 @@ const SideColor = styled.View`
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 10px;
-  border-width: 2px;
-  border-color: yellow;
 `;

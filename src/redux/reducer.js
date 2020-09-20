@@ -82,7 +82,11 @@ const auth = (
   state = {
     activeUser: '',
     activeUserToken: '',
-    activeUserData: { name: 'Guest User' },
+    activeUserData: {
+      name: 'Guest User',
+      email: 'guest@guestmail.com',
+      preferences: [{ name: 'Prefer Night Mode', state: false }],
+    },
     isAuthSuccessful: false,
     loginError: '',
     signupError: '',

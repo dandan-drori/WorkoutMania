@@ -20,10 +20,7 @@ const Workout = ({ name, createdAt }) => {
     </LeftAction>
   );
   const onSwipeLeft = () => {
-    deleteData(
-      'https://workout-mania-lambda.netlify.app/.netlify/functions/api/workouts',
-      name,
-    );
+    deleteData('http://10.0.0.12:8000/workouts', name);
     dispatch(incrementReFetch());
   };
 
@@ -37,6 +34,7 @@ const Workout = ({ name, createdAt }) => {
       onSwipeableLeftOpen={onSwipeLeft}>
       <Container
         isNightModeOn={isNightModeOn}
+        name={name}
         onPress={() => {
           navigation.push('Exercises', { name: name });
         }}
@@ -83,6 +81,7 @@ const Container = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  display: ${({ name }) => (name ? 'flex' : 'none')};
 `;
 
 const Title = styled.Text`
