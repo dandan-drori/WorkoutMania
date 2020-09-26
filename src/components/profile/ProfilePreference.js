@@ -12,7 +12,7 @@ const ProfilePreference = ({ preference }) => {
   const activeUserData = useSelector(state => state.auth.activeUserData);
   const onAction = () => {
     togglePreferenceState(
-      `http://10.0.0.12:8000/users/${activeUserData.email}`,
+      `http://192.168.1.18:8000/users/${activeUserData.email}`,
       activeUserData.preferences,
       preference.name,
       dispatch,
@@ -22,7 +22,7 @@ const ProfilePreference = ({ preference }) => {
 
   const offAction = () => {
     togglePreferenceState(
-      `http://10.0.0.12:8000/users/${activeUserData.email}`,
+      `http://192.168.1.18:8000/users/${activeUserData.email}`,
       activeUserData.preferences,
       preference.name,
       dispatch,

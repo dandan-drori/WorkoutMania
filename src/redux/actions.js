@@ -1,3 +1,5 @@
+import ProfileInfo from '../components/profile/ProfileInfo';
+
 export const openDrawer = () => {
   return { type: 'OPEN_DRAWER' };
 };
@@ -77,3 +79,15 @@ export const signOut = () => {
 export const setActiveUserData = data => {
   return { type: 'SET_ACTIVE_USER_DATA', payload: data };
 };
+
+export const setIsChooseUserModalOpen = bool => {
+  return { type: 'SET_IS_CHOOSE_USER_MODAL_OPEN', payload: bool }
+}
+
+export const setUsers = usersList => {
+  return {type: 'SET_USERS', payload: usersList}
+}
+
+export const addChat = chatObject => {
+  return {type: 'ADD_CHAT', payload: chatObject}
+}

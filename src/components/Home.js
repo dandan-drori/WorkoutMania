@@ -16,7 +16,7 @@ const Home = () => {
     const getActiveUserEmail = async () => {
       const activeUserEmail = await AsyncStorage.getItem('email');
       getActiveUserData(
-        `http://10.0.0.12:8000/users/${activeUserEmail}`,
+        `http://192.168.1.18:8000/users/${activeUserEmail}`,
         dispatch,
         setActiveUserData,
       );

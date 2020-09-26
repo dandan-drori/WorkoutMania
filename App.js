@@ -16,6 +16,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import Chat from './src/components/chat/Chat';
+import ActiveChat from './src/components/chat/ActiveChat';
+import HeaderRight from './src/components/universal/HeaderRight';
 
 const store = createStore(reducer);
 const Stack = createStackNavigator();
@@ -37,6 +40,8 @@ const HomeTabs = () => {
             iconName = focused ? 'dumbbell' : 'dumbbell';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'account' : 'account-outline';
+          } else if (route.name === 'Chat') {
+            iconName = focused ? 'chat' : 'chat-outline';
           }
           return <Icon name={iconName} size={size} color={color} />;
         },
@@ -48,6 +53,7 @@ const HomeTabs = () => {
       <Tab.Screen name='Home' component={HomeStack} />
       <Tab.Screen name='Workouts' component={WorkoutsStack} />
       <Tab.Screen name='Profile' component={ProfileStack} />
+      <Tab.Screen name='Chat' component={ChatStack} />
       <Tab.Screen name='Settings' component={SettingsStack} />
     </Tab.Navigator>
   );
@@ -107,6 +113,25 @@ const SettingsStack = () => {
         headerTitleStyle: 'bold',
       }}>
       <Stack.Screen name='Settings' component={Settings} />
+    </Stack.Navigator>
+  );
+};
+
+const ChatStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName='Chat'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#aa00ff' },
+        headerTintColor: '#fff',
+        headerTitleStyle: 'bold',
+      }}>
+      <Stack.Screen
+        name='Chat'
+        component={Chat}
+        options={{ headerRight: () => <HeaderRight /> }}
+      />
+      <Stack.Screen name='ActiveChat' component={ActiveChat} />
     </Stack.Navigator>
   );
 };

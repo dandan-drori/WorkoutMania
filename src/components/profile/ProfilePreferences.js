@@ -16,7 +16,7 @@ const ProfilePreferences = () => {
       <Preferences
         data={activeUserData.preferences}
         renderItem={({ item }) => <ProfilePreference preference={item} />}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={item => item.name}
       />
     </Container>
   );

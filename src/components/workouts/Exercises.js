@@ -39,7 +39,7 @@ const Exercises = ({ route, navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `http://10.0.0.12:8000/workouts/${name}`,
+      `http://192.168.1.18:8000/workouts/${name}`,
       setExercises,
       setIsLoading,
     );
@@ -66,6 +66,15 @@ const Exercises = ({ route, navigation }) => {
       <Title isNightModeOn={isNightModeOn}>{name}</Title>
       {isLoading ? (
         <ActivityIndicator size='large' color='#55bbff' />
+      ) : exercises.length < 1 ? (
+        <EmptyMessageContainer>
+          <EmptyMessage isNightModeOn={isNightModeOn}>
+            No Exercises :(
+          </EmptyMessage>
+          <EmptyMessage isNightModeOn={isNightModeOn}>
+            Tap the plus button to add an exercise!
+          </EmptyMessage>
+        </EmptyMessageContainer>
       ) : (
         <List
           data={exercises}
@@ -152,4 +161,15 @@ const Action = styled.TouchableOpacity`
   padding: 13px 16px;
   justify-content: center;
   align-items: center;
+`;
+
+const EmptyMessage = styled.Text`
+  color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 15px;
+`;
+
+const EmptyMessageContainer = styled.ScrollView`
+  margin-top: 50px;
 `;

@@ -131,7 +131,7 @@ const WorkoutMode = ({ route }) => {
   useEffect(() => {
     setIsLoading(true);
     getExercises(
-      `http://10.0.0.12:8000/workouts/${name}`,
+      `http://192.168.1.18:8000/workouts/${name}`,
       setExercises,
       setIsLoading,
     );

@@ -24,14 +24,14 @@ const Workouts = () => {
   useEffect(() => {
     setIsLoading(true);
     getData(
-      'http://10.0.0.12:8000/workouts',
+      'http://192.168.1.18:8000/workouts',
       dispatch,
       setWorkouts,
       setIsLoading,
       activeUserData?._id,
     );
     return () => setIsLoading(false);
-  }, [dispatch, reFetch, activeUserData._id]);
+  }, [dispatch, activeUserData._id, reFetch]);
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
@@ -64,6 +64,15 @@ const Workouts = () => {
       <Title isNightModeOn={isNightModeOn}>Workouts</Title>
       {isLoading ? (
         <ActivityIndicator size='large' color='#55bbff' />
+      ) : workouts.length < 3 ? (
+        <EmptyMessageContainer>
+          <EmptyMessage isNightModeOn={isNightModeOn}>
+            No Workouts :(
+          </EmptyMessage>
+          <EmptyMessage isNightModeOn={isNightModeOn}>
+            Tap the plus button to add a workout!
+          </EmptyMessage>
+        </EmptyMessageContainer>
       ) : (
         <List
           data={workouts}
@@ -75,16 +84,6 @@ const Workouts = () => {
             />
           )}
           keyExtractor={item => item?._id}
-          renderListEmptyComponent={() => {
-            <>
-              <EmptyMessage isNightModeOn={isNightModeOn}>
-                No Workouts :(
-              </EmptyMessage>
-              <EmptyMessage isNightModeOn={isNightModeOn}>
-                Use the plus button to add a workout!
-              </EmptyMessage>
-            </>;
-          }}
         />
       )}
       <ActionsContainer isActionsMenuOpen={isActionsMenuOpen}>
@@ -156,6 +155,10 @@ const Action = styled.TouchableOpacity`
 `;
 
 const List = styled.FlatList``;
+
+const EmptyMessageContainer = styled.ScrollView`
+  margin-top: 50px;
+`;
 
 const EmptyMessage = styled.Text`
   color: ${({ isNightModeOn }) => (isNightModeOn ? lightTheme : darkTheme)};

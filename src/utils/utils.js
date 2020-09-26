@@ -18,7 +18,13 @@ export const getData = async (
   setIsLoading(false);
 };
 
-export const postData = (url, workoutName, activeUserId) => {
+export const postData = async (
+  url,
+  workoutName,
+  activeUserId,
+  dispatch,
+  incrementReFetch,
+) => {
   const reqOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -27,7 +33,8 @@ export const postData = (url, workoutName, activeUserId) => {
       user: activeUserId,
     }),
   };
-  fetch(url, reqOptions);
+  const res = await fetch(url, reqOptions);
+  dispatch(incrementReFetch());
 };
 
 export const deleteData = (url, data) => {
@@ -238,3 +245,38 @@ export const togglePreferenceState = (
   fetch(url, reqOptions);
   dispatch(incrementReFetch());
 };
+
+export const setProfileInfo = (url, fieldName, oldProfileInfo, newValue) => {
+  const newProfileInfo = oldProfileInfo.map(info => {
+    if (info.name === fieldName) {
+      info.value = newValue;
+      return info;
+    } else {
+      return info;
+    }
+  });
+  const reqOptions = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify([
+      {
+        propName: 'profileInfo',
+        value: newProfileInfo,
+      },
+    ]),
+  };
+  fetch(url, reqOptions);
+};
+
+export const getProfileInfo = async (url, dispatch, setData) => {
+  const response = await fetch(url);
+  const json = await response.json();
+  dispatch(setData(json.user[0].profileInfo));
+};
+
+export const getUsers = async (url, setIsLoading, dispatch, setData) => {
+  const response = await fetch(url)
+  const json = await response.json()
+  dispatch(setData(json.users));
+  setIsLoading(false);
+}

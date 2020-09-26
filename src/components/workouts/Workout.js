@@ -20,7 +20,7 @@ const Workout = ({ name, createdAt }) => {
     </LeftAction>
   );
   const onSwipeLeft = () => {
-    deleteData('http://10.0.0.12:8000/workouts', name);
+    deleteData('http://192.168.1.18:8000/workouts', name);
     dispatch(incrementReFetch());
   };
 

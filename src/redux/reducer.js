@@ -24,9 +24,9 @@ const nightMode = (state = { isNightModeOn: false }, { type, payload }) => {
 
 const info = (
   state = {
-    currentWeight: '',
-    currentHeight: '',
-    targetWeight: '',
+    currentWeight: '0',
+    currentHeight: '0',
+    targetWeight: '0',
   },
   { type, payload },
 ) => {
@@ -113,6 +113,28 @@ const auth = (
   }
 };
 
+const chat = (state = {users: [], activeChats: []}, { type, payload }) => {
+  switch (type) {
+    case 'SET_USERS':
+      return {...state, users: payload};
+    case 'SET_CHAT':
+      return state;
+    case 'ADD_CHAT':
+      return {...state, activeChat: [...state.activeChats, payload]};
+    default:
+      return state;
+  }
+};
+
+const modals = (state = { isChooseUserModalOpen: false }, { type, payload }) => {
+  switch (type) {
+    case 'SET_IS_CHOOSE_USER_MODAL_OPEN':
+      return { ...state, isChooseUserModalOpen: payload };
+    default:
+      return state;
+  }
+}
+
 const reducer = combineReducers({
   drawer,
   nightMode,
@@ -121,5 +143,7 @@ const reducer = combineReducers({
   reFetch,
   workoutMode,
   auth,
+  chat,
+  modals,
 });
 export default reducer;

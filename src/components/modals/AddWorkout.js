@@ -14,10 +14,15 @@ const AddWorkout = ({
   const [name, setName] = useState('');
 
   const handleSubmit = () => {
-    postData('http://10.0.0.12:8000/workouts', name, activeUserId);
+    postData(
+      'http://192.168.1.18:8000/workouts',
+      name,
+      activeUserId,
+      dispatch,
+      incrementReFetch,
+    );
     setIsModalOpen(false);
     setIsActionsMenuOpen(false);
-    dispatch(incrementReFetch());
     setName('');
   };
 

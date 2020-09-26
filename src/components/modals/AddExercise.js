@@ -24,7 +24,7 @@ const AddExercise = ({
   });
 
   const handleSubmit = () => {
-    addExercise(`http://10.0.0.12:8000/workouts/${workoutName}`, exercises, {
+    addExercise(`http://192.168.1.18:8000/workouts/${workoutName}`, exercises, {
       name: formState.name,
       sets: formState.sets,
       reps: formState.reps,

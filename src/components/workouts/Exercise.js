@@ -33,7 +33,7 @@ const Exercise = ({
   );
   const onSwipeLeft = () => {
     deleteExercise(
-      `http://10.0.0.12:8000/workouts/${workoutName}`,
+      `http://192.168.1.18:8000/workouts/${workoutName}`,
       exercises,
       name,
     );
@@ -53,7 +53,7 @@ const Exercise = ({
               isDropset={isDropset}
               onPress={() => {
                 updateDropset(
-                  `http://10.0.0.12:8000/workouts/${workoutName}`,
+                  `http://192.168.1.18:8000/workouts/${workoutName}`,
                   exercises,
                   name,
                   {
@@ -74,7 +74,7 @@ const Exercise = ({
               isSuperset={isSuperset}
               onPress={() => {
                 updateSuperset(
-                  `http://10.0.0.12:8000/workouts/${workoutName}`,
+                  `http://192.168.1.18:8000/workouts/${workoutName}`,
                   exercises,
                   name,
                   {

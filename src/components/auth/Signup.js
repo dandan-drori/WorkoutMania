@@ -12,13 +12,19 @@ import Tooltip from '../universal/Tooltip';
 
 // TODO: send push notifications every time rest time is over instead of alert
 
+// TODO: upload a profile picture with multer - each user has profile pic field
+
 // TODO: add graphs to show user progress
+
+// web-sockets:
 
 // TODO: add see active users
 
 // TODO: add chat with active users
 
 // TODO: add invite friends to a workout
+
+// TODO: add group chats
 
 const Signup = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -128,7 +134,7 @@ const Signup = ({ navigation }) => {
                   isValidPassword(creds.password) === true
                 ) {
                   addUser(
-                    'http://10.0.0.12:8000/users/signup',
+                    'http://192.168.1.18:8000/users/signup',
                     creds.name,
                     creds.email,
                     creds.password,
